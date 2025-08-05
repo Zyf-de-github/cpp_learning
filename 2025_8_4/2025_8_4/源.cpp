@@ -166,12 +166,12 @@
 //}
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-#include <iostream>
-#include <thread>
-#include <Windows.h>
-#include <mutex>
-
-std::mutex mtx;
+//#include <iostream>
+//#include <thread>
+//#include <Windows.h>
+//#include <mutex>
+//
+//std::mutex mtx;
 
 
 
@@ -222,18 +222,18 @@ std::mutex mtx;
 
 
 
-int counter = 0;
-
-void increment() {
-    for (int i = 0; i < 100000; ++i) {
-        counter++;  // 多线程同时修改，导致数据竞争
-    }
-}
-
-int main() {
-    std::thread t1(increment);
-    std::thread t2(increment);
-    t1.join();
-    t2.join();
-    std::cout << counter;  // 结果可能小于 200000
-}
+//int counter = 0;
+//
+//void increment() {
+//    for (int i = 0; i < 100000; ++i) {
+//        counter++;  // 多线程同时修改，导致数据竞争
+//    }
+//}
+//
+//int main() {
+//    std::thread t1(increment);
+//    std::thread t2(increment);
+//    t1.join();
+//    t2.join();
+//    std::cout << counter;  // 结果可能小于 200000
+//}
