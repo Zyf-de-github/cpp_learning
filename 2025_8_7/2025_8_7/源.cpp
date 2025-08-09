@@ -3,6 +3,7 @@
 #include <map>
 #include <unordered_map>
 #include <set>
+#include <unordered_set>
 using namespace std;
 
 
@@ -99,7 +100,6 @@ public:
         }
     }
 
-
     int longestPalindrome(string s) {
         unordered_map<char, int> myMap;
         for (char c : s) 
@@ -174,6 +174,136 @@ public:
         return a;
     }
 
+
+    int titleToNumber(string columnTitle)
+    {
+        int len = columnTitle.size();
+        int result = 0;
+        for (int i = 0; i < len; i++)
+        {
+            result = result * 26 + (int)(columnTitle[i] - 'A' + 1);
+        }
+        return result;
+    }
+
+
+    int reverseBits(int n) {
+        vector<int> v;
+        for (int i = 0; i < 32; i++)
+        {
+            v.push_back(n % 2);
+            n = n / 2;
+        }
+        int result = 0;
+        for (auto it : v)
+        {
+            result = result * 2 + it;
+        }
+        return result;
+    }
+
+    int hammingWeight(int n) {
+        vector<int> v;
+        for (int i = 0; i < 32; i++)
+        {
+            v.push_back(n % 2);
+            n = n / 2;
+        }
+        int result = 0;
+        for (auto it : v)
+        {
+            if (it)
+            {
+                result += 1;
+            }
+        }
+        return result;
+    }
+
+//public:
+//        bool isHappy(int n)
+//        {
+//            this->judge(n);
+//            return this->flag;
+//        }
+//
+//private:
+//    bool flag = false;
+//    int times = 0;
+//    void judge(int num)
+//    {
+//        times += 1;
+//        if (times > 100000)
+//        {
+//            return;
+//        }
+//        if (num == 1)
+//        {
+//            flag = true;
+//        }
+//        else
+//        {
+//            int next = 0;
+//            while (num)
+//            {
+//                int temp = num % 10;
+//                next += temp * temp;
+//                num /= 10;
+//            }
+//            judge(next);
+//        }
+//        return;
+//    }
+
+//ListNode* removeElements(ListNode* head, int val) {
+    //    ListNode* my_head = new ListNode();
+    //    ListNode* result = my_head;
+    //    while (true)
+    //    {
+    //        if (head == NULL)
+    //        {
+    //            return result->next;
+    //        }
+    //        if (head->val == val)
+    //        {
+    //            head = head->next;
+    //        }
+    //        else
+    //        {
+    //            ListNode* temp = new ListNode(head->val);
+    //            my_head->next = temp;
+    //            my_head = my_head->next;
+    //            head = head->next;
+    //        }
+    //    }
+    //}
+
+    bool isIsomorphic(string s, string t) {
+        map<char, char> s_t;
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (s_t.find(s[i]) == s_t.end())
+            {
+                s_t[s[i]] = t[i];
+                unordered_set<char> seenValues;
+                for (const auto& it : s_t)
+                {
+                    if (!seenValues.insert(it.second).second)
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                if (s_t[s[i]] != t[i])
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 };
 
 
