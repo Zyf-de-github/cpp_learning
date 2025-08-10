@@ -304,6 +304,122 @@ public:
         }
         return true;
     }
+
+    bool isPowerOfThree(int n) {
+        if (n <= 0)
+        {
+            return false;
+        }
+        while (n != 1)
+        {
+            if (n != 1 && n % 3 != 0) {
+                return false;
+            }
+            n = n / 3;
+        }
+        return true;
+    }
+
+    vector<int> countBits(int n) {
+        vector<int> v1;
+        for (int i = 0; i <= n; i++)
+        {
+            int count = 0;
+            int n = i;
+            while (n)
+            {
+                if (n % 2)
+                {
+                    count++;
+                }
+                n = n / 2;
+            }
+            v1.push_back(count);
+        }
+        return v1;
+    }
+
+    bool isPowerOfFour(int n) {
+        if (n <= 0)
+        {
+            return false;
+        }
+        while (n != 1)
+        {
+            if (n != 1 && n % 4 != 0) {
+                return false;
+            }
+            n = n / 4;
+        }
+        return true;
+    }
+
+    void reverseString(vector<char>& s) {
+        int size = s.size();
+        for (int i = 0; i < size / 2; i++)
+        {
+            char temp = s[i];
+            s[i] = s[size - i - 1];
+            s[size - i - 1] = temp;
+        }
+    }
+
+    string reverseVowels(string s) {
+        int left = 0, right = s.size();
+        std::unordered_set<char> s1 = { 'a', 'e', 'i', 'o', 'u','A','E','I','O','U' };
+        while (left < right)
+        {
+            if (!s1.count(s[left]))
+            {
+                left++;
+            }
+            if (!s1.count(s[right]))
+            {
+                right--;
+            }
+            if (s1.count(s[left]) && s1.count(s[right]))
+            {
+                swap(s[left], s[right]);
+                left++;
+                right--;
+            }
+        }
+        return s;
+    }
+
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        set<int> s1;
+        set<int> s2;
+        for (auto it : nums1)
+        {
+            s1.insert(it);
+        }
+        for (auto it : nums2)
+        {
+            s2.insert(it);
+        }
+        auto ptr1 = s1.begin();
+        auto ptr2 = s2.begin();
+        vector<int> r;
+        while (ptr1 != s1.end() && ptr2 != s2.end())
+        {
+            if (*ptr1 == *ptr2)
+            {
+                r.push_back(*ptr1);
+                if (ptr1 != s1.end()) ptr1++;
+                if (ptr2 != s2.end()) ptr2++;
+            }
+            if (*ptr1 > *ptr2)
+            {
+                if (ptr2 != s2.end()) ptr2++;
+            }
+            if (*ptr1 < *ptr2)
+            {
+                if (ptr1 != s1.end()) ptr1++;
+            }
+        }
+        return r;
+    }
 };
 
 
