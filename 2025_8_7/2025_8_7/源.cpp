@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
+#include <algorithm>
 using namespace std;
 
 
@@ -420,6 +421,109 @@ public:
         }
         return r;
     }
+
+    int countSegments(string s) {
+        int count = 0;
+        int flag = 1;
+        int size = s.size();
+        if (size == 0)
+        {
+            return count;
+        }
+        for (int i = 1; i < size; i++)
+        {
+            if (s[i - 1] != ' ' && s[i] == ' ')
+            {
+                count++;
+            }
+        }
+        if (s[size - 1] != ' ')
+        {
+            count++;
+        }
+        return count;
+    }
+
+    int arrangeCoins(int n) {
+        int i = 1;
+        long long sum = 0;
+        while (true)
+        {
+            sum += i;
+            if (sum > n) return i - 1;
+            else if (sum == n)return i;
+            i++;
+        }
+    }
+
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        set<int> s1;
+        vector<int> v1;
+        int size = nums.size();
+        if (!size)
+        {
+            return v1;
+        }
+        for (auto it : nums)
+        {
+            s1.insert(it);
+        }
+        int num = *s1.begin();
+        for (int i = 1; i <= size; i++)
+        {
+            if (s1.find(i) == s1.end())
+            {
+                v1.push_back(i);
+            }
+        }
+        return v1;
+    }
+
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        sort(g.begin(), g.end());
+        sort(s.begin(), s.end());
+        int count = 0;
+        int i = 0;
+        int j = 0;
+        while (i < g.size() && j < s.size())
+        {
+            if (s[j] >= g[i])
+            {
+                count++;
+                i++;
+                j++;
+            }
+            else
+            {
+                j++;
+            }
+        }
+        return count;
+    }
+
+    int matchPlayersAndTrainers(vector<int>& players, vector<int>& trainers) {
+        sort(players.begin(), players.end());
+        sort(trainers.begin(), trainers.end());
+        int count = 0;
+        int i = 0;
+        int j = 0;
+        while (i < players.size() && j < trainers.size())
+        {
+            if (trainers[j] >= players[i])
+            {
+                count++;
+                i++;
+                j++;
+            }
+            else
+            {
+                j++;
+            }
+        }
+        return count;
+    }
+
+
 };
 
 
