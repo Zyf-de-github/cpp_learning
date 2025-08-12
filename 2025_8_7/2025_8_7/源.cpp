@@ -35,496 +35,599 @@ using namespace std;
 //    }
 //};
 
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
+};
 
 class Solution {
 public:
-
-    char findTheDifference(string s, string t) 
+    bool isBalanced(TreeNode* root) {
+        int height = 0;
+        this->finding(root, height);
+        if (s1.empty())return true;
+        if (*this->s1.rbegin() - *this->s1.begin() < 2)return true;
+        else return false;
+    }
+private:
+    set<int> s1;
+    void finding(TreeNode* node, int height)
     {
-        int count[26] = { 0 };
-        for (auto it : s)
+        if (node == NULL)
         {
-            count[it - 'a']++;
+            this->s1.insert(height);
+            return;
         }
-        for (auto it : t)
-        {
-            count[it - 'a']--;
-            if (count[it - 'a'] < 0)
-            {
-                return it;
-            }
-        }
-        return ' ';
+        finding(node->right, height+1);
+        finding(node->left, height+1);
+        return;
     }
 
-    bool isSubsequence(string s, string t) 
+
+
+
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color)
     {
-        int i = 0, j = 0;
-        for (i=0;i<t.size();i++)
-        {
-            if (j == s.size())
-            {
-                return true;
-            }
-            if (s[j] == t[i])
-            {
-                j++;
-            }
-        }
-        if (j == s.size())
-        {
-            return true;
-        }
-        return false;
+        this->init_num = image[sr][sc];
+        if (init_num == color)return image;
+        this->m = image.size();
+        this->n = image[0].size();
+        finding(image, sr, sc, color);
+        return image;
     }
-
-    int thirdMax(vector<int>& nums) {
-        set<int> s;
-        for (auto it : nums)
-        {
-            s.insert(it);
-        }
-        if (s.size() < 3)
-        {
-            return *s.rbegin();
-        }
-        else
-        {
-            int i = 0;
-            for (auto it = s.rbegin(); it != s.rend(); it++, i++)
-            {
-                if (i == 2)
-                {
-                    return *it;
-                }
-            }
-        }
-    }
-
-    int longestPalindrome(string s) {
-        unordered_map<char, int> myMap;
-        for (char c : s) 
-        {
-            myMap[c]++;
-        }
-        int length=0;
-        int total=0;
-        for (const auto& it : myMap) 
-        {
-            total += it.second;
-            if (it.second % 2 == 0)
-            {
-                length += it.second;
-            }
-            if (it.second % 2 != 0)
-            {
-                length += it.second-1;
-            }
-        }
-        if (total > length)
-        {
-            length += 1;
-        }
-        return length;
-    }
-
-
-    string addStrings(string num1, string num2) {
-        if (num1.size() < num2.size())
-        {
-            string temp = num1;
-            num1 = num2;
-            num2 = temp;
-        }
-        int size1 = num1.size() - 1;
-        int size2 = num2.size() - 1;
-        int mid = 0;
-        string a;
-        for (; size2 >= 0; size2--, size1--)
-        {
-            int x = num1[size1] - '0' + num2[size2] - '0' + mid;
-            mid = 0;
-            if (x >= 10)
-            {
-                mid = 1;
-                a = (char)(x - 10 + '0') + a;
-            }
-            else
-            {
-                a = (char)(x + '0') + a;
-            }
-        }
-        for (; size1 >= 0; size1--)
-        {
-            int x = num1[size1] - '0' + mid;
-            mid = 0;
-            if (x >= 10)
-            {
-                mid = 1;
-                a = (char)(x - 10 + '0') + a;
-            }
-            else
-            {
-                a = (char)(x + '0') + a;
-            }
-        }
-        if (mid == 1)
-        {
-            a = '1' + a;
-        }
-        return a;
-    }
-
-
-    int titleToNumber(string columnTitle)
+private:
+    int init_num = 0;
+    int m = 0;
+    int n = 0;
+    void finding(vector<vector<int>>& image, int sr, int sc, int color)
     {
-        int len = columnTitle.size();
-        int result = 0;
-        for (int i = 0; i < len; i++)
+        if (sr < 0 || sr >= m) return;
+        if (sc < 0 || sc >= n) return;
+        if (image[sr][sc] == this->init_num)
         {
-            result = result * 26 + (int)(columnTitle[i] - 'A' + 1);
-        }
-        return result;
-    }
-
-
-    int reverseBits(int n) {
-        vector<int> v;
-        for (int i = 0; i < 32; i++)
-        {
-            v.push_back(n % 2);
-            n = n / 2;
-        }
-        int result = 0;
-        for (auto it : v)
-        {
-            result = result * 2 + it;
-        }
-        return result;
-    }
-
-    int hammingWeight(int n) {
-        vector<int> v;
-        for (int i = 0; i < 32; i++)
-        {
-            v.push_back(n % 2);
-            n = n / 2;
-        }
-        int result = 0;
-        for (auto it : v)
-        {
-            if (it)
-            {
-                result += 1;
-            }
-        }
-        return result;
-    }
-
-//public:
-//        bool isHappy(int n)
-//        {
-//            this->judge(n);
-//            return this->flag;
-//        }
-//
-//private:
-//    bool flag = false;
-//    int times = 0;
-//    void judge(int num)
-//    {
-//        times += 1;
-//        if (times > 100000)
-//        {
-//            return;
-//        }
-//        if (num == 1)
-//        {
-//            flag = true;
-//        }
-//        else
-//        {
-//            int next = 0;
-//            while (num)
-//            {
-//                int temp = num % 10;
-//                next += temp * temp;
-//                num /= 10;
-//            }
-//            judge(next);
-//        }
-//        return;
-//    }
-
-//ListNode* removeElements(ListNode* head, int val) {
-    //    ListNode* my_head = new ListNode();
-    //    ListNode* result = my_head;
-    //    while (true)
-    //    {
-    //        if (head == NULL)
-    //        {
-    //            return result->next;
-    //        }
-    //        if (head->val == val)
-    //        {
-    //            head = head->next;
-    //        }
-    //        else
-    //        {
-    //            ListNode* temp = new ListNode(head->val);
-    //            my_head->next = temp;
-    //            my_head = my_head->next;
-    //            head = head->next;
-    //        }
-    //    }
-    //}
-
-    bool isIsomorphic(string s, string t) {
-        map<char, char> s_t;
-        for (int i = 0; i < s.size(); i++)
-        {
-            if (s_t.find(s[i]) == s_t.end())
-            {
-                s_t[s[i]] = t[i];
-                unordered_set<char> seenValues;
-                for (const auto& it : s_t)
-                {
-                    if (!seenValues.insert(it.second).second)
-                    {
-                        return false;
-                    }
-                }
-            }
-            else
-            {
-                if (s_t[s[i]] != t[i])
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    bool isPowerOfThree(int n) {
-        if (n <= 0)
-        {
-            return false;
-        }
-        while (n != 1)
-        {
-            if (n != 1 && n % 3 != 0) {
-                return false;
-            }
-            n = n / 3;
-        }
-        return true;
-    }
-
-    vector<int> countBits(int n) {
-        vector<int> v1;
-        for (int i = 0; i <= n; i++)
-        {
-            int count = 0;
-            int n = i;
-            while (n)
-            {
-                if (n % 2)
-                {
-                    count++;
-                }
-                n = n / 2;
-            }
-            v1.push_back(count);
-        }
-        return v1;
-    }
-
-    bool isPowerOfFour(int n) {
-        if (n <= 0)
-        {
-            return false;
-        }
-        while (n != 1)
-        {
-            if (n != 1 && n % 4 != 0) {
-                return false;
-            }
-            n = n / 4;
-        }
-        return true;
-    }
-
-    void reverseString(vector<char>& s) {
-        int size = s.size();
-        for (int i = 0; i < size / 2; i++)
-        {
-            char temp = s[i];
-            s[i] = s[size - i - 1];
-            s[size - i - 1] = temp;
+            image[sr][sc] = color;
+            finding(image, sr - 1, sc, color);
+            finding(image, sr + 1, sc, color);
+            finding(image, sr, sc - 1, color);
+            finding(image, sr, sc + 1, color);
         }
     }
 
-    string reverseVowels(string s) {
-        int left = 0, right = s.size();
-        std::unordered_set<char> s1 = { 'a', 'e', 'i', 'o', 'u','A','E','I','O','U' };
-        while (left < right)
-        {
-            if (!s1.count(s[left]))
-            {
-                left++;
-            }
-            if (!s1.count(s[right]))
-            {
-                right--;
-            }
-            if (s1.count(s[left]) && s1.count(s[right]))
-            {
-                swap(s[left], s[right]);
-                left++;
-                right--;
-            }
-        }
-        return s;
-    }
 
-    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
-        set<int> s1;
-        set<int> s2;
-        for (auto it : nums1)
-        {
-            s1.insert(it);
-        }
-        for (auto it : nums2)
-        {
-            s2.insert(it);
-        }
-        auto ptr1 = s1.begin();
-        auto ptr2 = s2.begin();
-        vector<int> r;
-        while (ptr1 != s1.end() && ptr2 != s2.end())
-        {
-            if (*ptr1 == *ptr2)
-            {
-                r.push_back(*ptr1);
-                if (ptr1 != s1.end()) ptr1++;
-                if (ptr2 != s2.end()) ptr2++;
-            }
-            if (*ptr1 > *ptr2)
-            {
-                if (ptr2 != s2.end()) ptr2++;
-            }
-            if (*ptr1 < *ptr2)
-            {
-                if (ptr1 != s1.end()) ptr1++;
-            }
-        }
-        return r;
-    }
 
-    int countSegments(string s) {
-        int count = 0;
-        int flag = 1;
-        int size = s.size();
-        if (size == 0)
+    vector<vector<int>> flipAndInvertImage(vector<vector<int>>& image) {
+        int roll = image.size();
+        int len = roll;
+        for (int i = 0; i < roll; i++)
         {
-            return count;
-        }
-        for (int i = 1; i < size; i++)
-        {
-            if (s[i - 1] != ' ' && s[i] == ' ')
+            for (int j = 0; j < roll / 2; j++)
             {
-                count++;
+                int temp = image[i][j];
+                image[i][j] = image[i][len - j - 1];
+                image[i][len - j - 1] = temp;
+                image[i][j] = 1 - image[i][j];
+                image[i][len - j - 1] = 1 - image[i][len - j - 1];
+            }
+            if (roll % 2)
+            {
+                image[i][roll / 2] = 1 - image[i][roll / 2];
             }
         }
-        if (s[size - 1] != ' ')
-        {
-            count++;
-        }
-        return count;
+        return image;
     }
-
-    int arrangeCoins(int n) {
-        int i = 1;
-        long long sum = 0;
-        while (true)
-        {
-            sum += i;
-            if (sum > n) return i - 1;
-            else if (sum == n)return i;
-            i++;
-        }
-    }
-
-    vector<int> findDisappearedNumbers(vector<int>& nums) {
-        set<int> s1;
-        vector<int> v1;
-        int size = nums.size();
-        if (!size)
-        {
-            return v1;
-        }
-        for (auto it : nums)
-        {
-            s1.insert(it);
-        }
-        int num = *s1.begin();
-        for (int i = 1; i <= size; i++)
-        {
-            if (s1.find(i) == s1.end())
-            {
-                v1.push_back(i);
-            }
-        }
-        return v1;
-    }
-
-    int findContentChildren(vector<int>& g, vector<int>& s) {
-        sort(g.begin(), g.end());
-        sort(s.begin(), s.end());
-        int count = 0;
-        int i = 0;
-        int j = 0;
-        while (i < g.size() && j < s.size())
-        {
-            if (s[j] >= g[i])
-            {
-                count++;
-                i++;
-                j++;
-            }
-            else
-            {
-                j++;
-            }
-        }
-        return count;
-    }
-
-    int matchPlayersAndTrainers(vector<int>& players, vector<int>& trainers) {
-        sort(players.begin(), players.end());
-        sort(trainers.begin(), trainers.end());
-        int count = 0;
-        int i = 0;
-        int j = 0;
-        while (i < players.size() && j < trainers.size())
-        {
-            if (trainers[j] >= players[i])
-            {
-                count++;
-                i++;
-                j++;
-            }
-            else
-            {
-                j++;
-            }
-        }
-        return count;
-    }
-
 
 };
+
+
+//class Solution {
+//public:
+//
+////    char findTheDifference(string s, string t) 
+////    {
+////        int count[26] = { 0 };
+////        for (auto it : s)
+////        {
+////            count[it - 'a']++;
+////        }
+////        for (auto it : t)
+////        {
+////            count[it - 'a']--;
+////            if (count[it - 'a'] < 0)
+////            {
+////                return it;
+////            }
+////        }
+////        return ' ';
+////    }
+////
+////    bool isSubsequence(string s, string t) 
+////    {
+////        int i = 0, j = 0;
+////        for (i=0;i<t.size();i++)
+////        {
+////            if (j == s.size())
+////            {
+////                return true;
+////            }
+////            if (s[j] == t[i])
+////            {
+////                j++;
+////            }
+////        }
+////        if (j == s.size())
+////        {
+////            return true;
+////        }
+////        return false;
+////    }
+////
+////    int thirdMax(vector<int>& nums) {
+////        set<int> s;
+////        for (auto it : nums)
+////        {
+////            s.insert(it);
+////        }
+////        if (s.size() < 3)
+////        {
+////            return *s.rbegin();
+////        }
+////        else
+////        {
+////            int i = 0;
+////            for (auto it = s.rbegin(); it != s.rend(); it++, i++)
+////            {
+////                if (i == 2)
+////                {
+////                    return *it;
+////                }
+////            }
+////        }
+////    }
+////
+////    int longestPalindrome(string s) {
+////        unordered_map<char, int> myMap;
+////        for (char c : s) 
+////        {
+////            myMap[c]++;
+////        }
+////        int length=0;
+////        int total=0;
+////        for (const auto& it : myMap) 
+////        {
+////            total += it.second;
+////            if (it.second % 2 == 0)
+////            {
+////                length += it.second;
+////            }
+////            if (it.second % 2 != 0)
+////            {
+////                length += it.second-1;
+////            }
+////        }
+////        if (total > length)
+////        {
+////            length += 1;
+////        }
+////        return length;
+////    }
+////
+////
+////    string addStrings(string num1, string num2) {
+////        if (num1.size() < num2.size())
+////        {
+////            string temp = num1;
+////            num1 = num2;
+////            num2 = temp;
+////        }
+////        int size1 = num1.size() - 1;
+////        int size2 = num2.size() - 1;
+////        int mid = 0;
+////        string a;
+////        for (; size2 >= 0; size2--, size1--)
+////        {
+////            int x = num1[size1] - '0' + num2[size2] - '0' + mid;
+////            mid = 0;
+////            if (x >= 10)
+////            {
+////                mid = 1;
+////                a = (char)(x - 10 + '0') + a;
+////            }
+////            else
+////            {
+////                a = (char)(x + '0') + a;
+////            }
+////        }
+////        for (; size1 >= 0; size1--)
+////        {
+////            int x = num1[size1] - '0' + mid;
+////            mid = 0;
+////            if (x >= 10)
+////            {
+////                mid = 1;
+////                a = (char)(x - 10 + '0') + a;
+////            }
+////            else
+////            {
+////                a = (char)(x + '0') + a;
+////            }
+////        }
+////        if (mid == 1)
+////        {
+////            a = '1' + a;
+////        }
+////        return a;
+////    }
+////
+////
+////    int titleToNumber(string columnTitle)
+////    {
+////        int len = columnTitle.size();
+////        int result = 0;
+////        for (int i = 0; i < len; i++)
+////        {
+////            result = result * 26 + (int)(columnTitle[i] - 'A' + 1);
+////        }
+////        return result;
+////    }
+////
+////
+////    int reverseBits(int n) {
+////        vector<int> v;
+////        for (int i = 0; i < 32; i++)
+////        {
+////            v.push_back(n % 2);
+////            n = n / 2;
+////        }
+////        int result = 0;
+////        for (auto it : v)
+////        {
+////            result = result * 2 + it;
+////        }
+////        return result;
+////    }
+////
+////    int hammingWeight(int n) {
+////        vector<int> v;
+////        for (int i = 0; i < 32; i++)
+////        {
+////            v.push_back(n % 2);
+////            n = n / 2;
+////        }
+////        int result = 0;
+////        for (auto it : v)
+////        {
+////            if (it)
+////            {
+////                result += 1;
+////            }
+////        }
+////        return result;
+////    }
+////
+//////public:
+//////        bool isHappy(int n)
+//////        {
+//////            this->judge(n);
+//////            return this->flag;
+//////        }
+//////
+//////private:
+//////    bool flag = false;
+//////    int times = 0;
+//////    void judge(int num)
+//////    {
+//////        times += 1;
+//////        if (times > 100000)
+//////        {
+//////            return;
+//////        }
+//////        if (num == 1)
+//////        {
+//////            flag = true;
+//////        }
+//////        else
+//////        {
+//////            int next = 0;
+//////            while (num)
+//////            {
+//////                int temp = num % 10;
+//////                next += temp * temp;
+//////                num /= 10;
+//////            }
+//////            judge(next);
+//////        }
+//////        return;
+//////    }
+////
+//////ListNode* removeElements(ListNode* head, int val) {
+////    //    ListNode* my_head = new ListNode();
+////    //    ListNode* result = my_head;
+////    //    while (true)
+////    //    {
+////    //        if (head == NULL)
+////    //        {
+////    //            return result->next;
+////    //        }
+////    //        if (head->val == val)
+////    //        {
+////    //            head = head->next;
+////    //        }
+////    //        else
+////    //        {
+////    //            ListNode* temp = new ListNode(head->val);
+////    //            my_head->next = temp;
+////    //            my_head = my_head->next;
+////    //            head = head->next;
+////    //        }
+////    //    }
+////    //}
+////
+////    bool isIsomorphic(string s, string t) {
+////        map<char, char> s_t;
+////        for (int i = 0; i < s.size(); i++)
+////        {
+////            if (s_t.find(s[i]) == s_t.end())
+////            {
+////                s_t[s[i]] = t[i];
+////                unordered_set<char> seenValues;
+////                for (const auto& it : s_t)
+////                {
+////                    if (!seenValues.insert(it.second).second)
+////                    {
+////                        return false;
+////                    }
+////                }
+////            }
+////            else
+////            {
+////                if (s_t[s[i]] != t[i])
+////                {
+////                    return false;
+////                }
+////            }
+////        }
+////        return true;
+////    }
+////
+////    bool isPowerOfThree(int n) {
+////        if (n <= 0)
+////        {
+////            return false;
+////        }
+////        while (n != 1)
+////        {
+////            if (n != 1 && n % 3 != 0) {
+////                return false;
+////            }
+////            n = n / 3;
+////        }
+////        return true;
+////    }
+////
+////    vector<int> countBits(int n) {
+////        vector<int> v1;
+////        for (int i = 0; i <= n; i++)
+////        {
+////            int count = 0;
+////            int n = i;
+////            while (n)
+////            {
+////                if (n % 2)
+////                {
+////                    count++;
+////                }
+////                n = n / 2;
+////            }
+////            v1.push_back(count);
+////        }
+////        return v1;
+////    }
+////
+////    bool isPowerOfFour(int n) {
+////        if (n <= 0)
+////        {
+////            return false;
+////        }
+////        while (n != 1)
+////        {
+////            if (n != 1 && n % 4 != 0) {
+////                return false;
+////            }
+////            n = n / 4;
+////        }
+////        return true;
+////    }
+////
+////    void reverseString(vector<char>& s) {
+////        int size = s.size();
+////        for (int i = 0; i < size / 2; i++)
+////        {
+////            char temp = s[i];
+////            s[i] = s[size - i - 1];
+////            s[size - i - 1] = temp;
+////        }
+////    }
+////
+////    string reverseVowels(string s) {
+////        int left = 0, right = s.size();
+////        std::unordered_set<char> s1 = { 'a', 'e', 'i', 'o', 'u','A','E','I','O','U' };
+////        while (left < right)
+////        {
+////            if (!s1.count(s[left]))
+////            {
+////                left++;
+////            }
+////            if (!s1.count(s[right]))
+////            {
+////                right--;
+////            }
+////            if (s1.count(s[left]) && s1.count(s[right]))
+////            {
+////                swap(s[left], s[right]);
+////                left++;
+////                right--;
+////            }
+////        }
+////        return s;
+////    }
+////
+////    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+////        set<int> s1;
+////        set<int> s2;
+////        for (auto it : nums1)
+////        {
+////            s1.insert(it);
+////        }
+////        for (auto it : nums2)
+////        {
+////            s2.insert(it);
+////        }
+////        auto ptr1 = s1.begin();
+////        auto ptr2 = s2.begin();
+////        vector<int> r;
+////        while (ptr1 != s1.end() && ptr2 != s2.end())
+////        {
+////            if (*ptr1 == *ptr2)
+////            {
+////                r.push_back(*ptr1);
+////                if (ptr1 != s1.end()) ptr1++;
+////                if (ptr2 != s2.end()) ptr2++;
+////            }
+////            if (*ptr1 > *ptr2)
+////            {
+////                if (ptr2 != s2.end()) ptr2++;
+////            }
+////            if (*ptr1 < *ptr2)
+////            {
+////                if (ptr1 != s1.end()) ptr1++;
+////            }
+////        }
+////        return r;
+////    }
+////
+////    int countSegments(string s) {
+////        int count = 0;
+////        int flag = 1;
+////        int size = s.size();
+////        if (size == 0)
+////        {
+////            return count;
+////        }
+////        for (int i = 1; i < size; i++)
+////        {
+////            if (s[i - 1] != ' ' && s[i] == ' ')
+////            {
+////                count++;
+////            }
+////        }
+////        if (s[size - 1] != ' ')
+////        {
+////            count++;
+////        }
+////        return count;
+////    }
+////
+////    int arrangeCoins(int n) {
+////        int i = 1;
+////        long long sum = 0;
+////        while (true)
+////        {
+////            sum += i;
+////            if (sum > n) return i - 1;
+////            else if (sum == n)return i;
+////            i++;
+////        }
+////    }
+////
+////    vector<int> findDisappearedNumbers(vector<int>& nums) {
+////        set<int> s1;
+////        vector<int> v1;
+////        int size = nums.size();
+////        if (!size)
+////        {
+////            return v1;
+////        }
+////        for (auto it : nums)
+////        {
+////            s1.insert(it);
+////        }
+////        int num = *s1.begin();
+////        for (int i = 1; i <= size; i++)
+////        {
+////            if (s1.find(i) == s1.end())
+////            {
+////                v1.push_back(i);
+////            }
+////        }
+////        return v1;
+////    }
+////
+////    int findContentChildren(vector<int>& g, vector<int>& s) {
+////        sort(g.begin(), g.end());
+////        sort(s.begin(), s.end());
+////        int count = 0;
+////        int i = 0;
+////        int j = 0;
+////        while (i < g.size() && j < s.size())
+////        {
+////            if (s[j] >= g[i])
+////            {
+////                count++;
+////                i++;
+////                j++;
+////            }
+////            else
+////            {
+////                j++;
+////            }
+////        }
+////        return count;
+////    }
+////
+////    int matchPlayersAndTrainers(vector<int>& players, vector<int>& trainers) {
+////        sort(players.begin(), players.end());
+////        sort(trainers.begin(), trainers.end());
+////        int count = 0;
+////        int i = 0;
+////        int j = 0;
+////        while (i < players.size() && j < trainers.size())
+////        {
+////            if (trainers[j] >= players[i])
+////            {
+////                count++;
+////                i++;
+////                j++;
+////            }
+////            else
+////            {
+////                j++;
+////            }
+////        }
+////        return count;
+////    }
+//
+//
+//};
+
+
+
+
+//int main()
+//{
+//    Solution s1;
+//    //char a = s1.findTheDifference("abcd", "abcde");
+//    //bool a = s1.isSubsequence("abc", "ahbgdc");
+//    //int a = s1.longestPalindrome("abccccdd");
+//
+//    //cout << a;
+//	return 0;
+//}
+
 
 
 
@@ -532,10 +635,11 @@ public:
 int main()
 {
     Solution s1;
-    //char a = s1.findTheDifference("abcd", "abcde");
-    //bool a = s1.isSubsequence("abc", "ahbgdc");
-    //int a = s1.longestPalindrome("abccccdd");
-
-    //cout << a;
-	return 0;
+    TreeNode* root = new TreeNode(3);
+    root->left = new TreeNode(9);
+    root->right = new TreeNode(20);
+    root->right->left = new TreeNode(15);
+    root->right->right = new TreeNode(7);
+    cout<<s1.isBalanced(root);
+    return 0;
 }
