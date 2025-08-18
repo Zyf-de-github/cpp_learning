@@ -74,8 +74,80 @@ class Solution {
 //            }
 //        }
 //    }
-
-
+public:
+    int maxSubArray(vector<int>& nums) {
+        vector<int> dp;
+        int ptr = 0;
+        int size = nums.size();
+        for (int i = 0; i < size; i++)
+        {
+            if (i == 0)
+            {
+                dp.push_back(nums[i]);
+            }
+            else
+            {
+                if (dp[ptr] <= 0)
+                {
+                    dp.push_back(nums[i]);
+                }
+                else
+                {
+                    dp.push_back(nums[i] + dp[ptr]);
+                }
+                ptr++;
+            }
+        }
+        size = dp.size();
+        int result = -10000;
+        for (int i = 0; i < size; i++)
+        {
+            if (dp[i] > result)result = dp[i];
+        }
+        return result;
+    }
+    bool canJump(vector<int>& nums) {
+        int max = 0;
+        int size = nums.size();
+        for (int i = 0; i < size; i++)
+        {
+            if (nums[i] + i > max)max = nums[i] + i;
+            if (max < i)return false;
+            if (max > size)return true;
+        }
+        return false;
+    }
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(m, vector<int>(n, 1));
+        for (int i = 1; i < m; i++)
+        {
+            for (int j = 1; j < n; j++)
+            {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (obstacleGrid[i][j] == 1)dp[i][j] = 0;
+                else
+                {
+                    if (i == 0 && j == 0)dp[i][j] = 1;
+                    else if (i == 0)dp[i][j] = dp[i][j - 1];
+                    else if (j == 0)dp[i][j] = dp[i - 1][j];
+                    else dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
 };
 // {1, 2, 3, 4},
 // {5, 6, 7, 8},
@@ -88,13 +160,13 @@ class Solution {
 //4,5,6
 //7,8,9
 
-int main() 
+int main()
 {
     Solution s1;
     //vector<vector<int>> matrix = { {1,2,3},{4,5,6},{7,8,9 } };
     //vector<vector<int>> matrix2 = { {1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16} };
     //s1.rotate(matrix2);
-
-
+    vector<int> v = {2, 3, 1, 1, 4};
+    s1.canJump(v);
     return 0;
 }
