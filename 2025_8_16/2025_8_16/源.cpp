@@ -148,6 +148,79 @@ public:
         }
         return dp[m - 1][n - 1];
     }
+    int fib(int n) {
+        if (n == 0)return 0;
+        vector<int> dp;
+        for (int i = 0; i < n; i++)
+        {
+            if (i == 0 || i == 1)dp.push_back(1);
+            else dp.push_back(dp[i - 1] + dp[i - 2]);
+        }
+        return dp[n - 1];
+    }
+    int tribonacci(int n) {
+        // if (n == 0)return 0;
+        vector<int> dp;
+        for (int i = 0; i <= n; i++)
+        {
+            if (i == 0)dp.push_back(0);
+            else if (i == 2 || i == 1)dp.push_back(1);
+            else dp.push_back(dp[i - 1] + dp[i - 2] + dp[i - 3]);
+        }
+        return dp[n];
+    }
+    int minCostClimbingStairs(vector<int>& cost) {
+        vector<int> dp;
+        dp.push_back(0);
+        dp.push_back(0);
+        int x = cost.size();
+        for (int i = 2; i <= x; i++)
+        {
+            if (dp[i - 1] + cost[i - 1] > dp[i - 2] + cost[i - 2])dp.push_back(dp[i - 2] + cost[i - 2]);
+            else dp.push_back(dp[i - 1] + cost[i - 1]);
+        }
+        return dp[x];
+    }
+    int rob(vector<int>& nums) {
+        vector<int> dp;
+        int x = nums.size();
+        for (int i = 0; i < x; i++)
+        {
+            if (i == 0)dp.push_back(nums[0]);
+            else if (i == 1)dp.push_back(max(nums[0], nums[1]));
+            else
+            {
+                if (nums[i] + dp[i - 2] > dp[i - 1])dp.push_back(nums[i] + dp[i - 2]);
+                else dp.push_back(dp[i - 1]);
+            }
+        }
+        if (x == 1)
+        {
+            return dp[0];
+        }
+        if (x == 2)
+        {
+            return dp[0] > dp[1] ? dp[0] : dp[1];
+        }
+        return dp[x - 1];
+    }
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int m = triangle.size();
+        vector<vector<int>> dp;
+        dp.push_back(triangle[0]);
+        for (int i = 1; i < m; i++)
+        {
+            vector<int> temp;
+            for (int j = 0; j < triangle[i].size(); j++)
+            {
+                if (j == 0)temp.push_back(triangle[i][j] + dp[i - 1][j]);
+                else if (j == triangle[i].size() - 1)temp.push_back(triangle[i][j] + dp[i - 1][j - 1]);
+                else temp.push_back(triangle[i][j] + min(dp[i - 1][j - 1], dp[i - 1][j]));
+            }
+            dp.push_back(temp);
+        }
+        return *min_element(dp[m - 1].begin(), dp[m - 1].end());
+    }
 };
 // {1, 2, 3, 4},
 // {5, 6, 7, 8},
@@ -166,7 +239,12 @@ int main()
     //vector<vector<int>> matrix = { {1,2,3},{4,5,6},{7,8,9 } };
     //vector<vector<int>> matrix2 = { {1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16} };
     //s1.rotate(matrix2);
-    vector<int> v = {2, 3, 1, 1, 4};
-    s1.canJump(v);
+    //vector<int> v = {2, 3, 1, 1, 4};
+    //s1.canJump(v);4
+    //s1.tribonacci(5);
+    //vector<int> matrix = { 10,15,20 };
+    //s1.minCostClimbingStairs(matrix);
+    vector<int> matrix = { 2, 7, 9, 3, 1 };
+    s1.rob(matrix);
     return 0;
 }
