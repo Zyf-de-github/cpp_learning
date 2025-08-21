@@ -221,6 +221,23 @@ public:
         }
         return *min_element(dp[m - 1].begin(), dp[m - 1].end());
     }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        vector<vector<int>> dp;
+        dp.push_back(matrix[0]);
+        int size = matrix.size();
+        for (int i = 1; i < size; i++)
+        {
+            vector<int> temp;
+            for (int j = 0; j < size; j++)
+            {
+                if (j == 0)temp.push_back(matrix[i][j] + min(dp[i - 1][j], dp[i - 1][j + 1]));
+                else if (j == size - 1)temp.push_back(matrix[i][j] + min(dp[i - 1][j - 1], dp[i - 1][j]));
+                else temp.push_back(matrix[i][j] + min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i - 1][j + 1])));
+            }
+            dp.push_back(temp);
+        }
+        return *min_element(dp[size - 1].begin(), dp[size - 1].end());
+    }
 };
 // {1, 2, 3, 4},
 // {5, 6, 7, 8},
