@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 class Solution {
@@ -238,13 +239,99 @@ public:
         }
         return *min_element(dp[size - 1].begin(), dp[size - 1].end());
     }
+    int minimumArea(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        int left = 0;
+        int right = 0;
+        int up = 0;
+        int down = 0;
+        for (int i = 0; i < m; i++)
+        {
+            int flag_up = 0;
+            int flag_down = 0;
+            for (int j = 0; j < n; j++)
+            {
+                if ((!up) && (grid[i][j]))flag_up = i + 1;
+                if ((!down) && (grid[m - 1 - i][j]))flag_down = m - i;
+            }
+            if (flag_up)up = flag_up;
+            if (flag_down)down = flag_down;
+
+        }
+        for (int j = 0; j < n; j++)
+        {
+            int flag_left = 0;
+            int flag_right = 0;
+            for (int i = 0; i < m; i++)
+            {
+                if ((!left) && (grid[i][j]))flag_left = j + 1;
+                if ((!right) && (grid[i][n - 1 - j]))flag_right = n - j;
+            }
+            if (flag_left)left = flag_left;
+            if (flag_right)right = flag_right;
+        }
+        return (down - up + 1) * (right - left + 1);
+    }
 };
 // {1, 2, 3, 4},
 // {5, 6, 7, 8},
 // {9, 10,11,12},
 // {13,14,15,16}
 
+class Solution2 {
+    int rob(vector<int>& nums) {
+        vector<int> dp;
+        int x = nums.size();
+        for (int i = 0; i < x; i++)
+        {
+            if (i == 0)dp.push_back(nums[0]);
+            else if (i == 1)dp.push_back(max(nums[0], nums[1]));
+            else
+            {
+                if (nums[i] + dp[i - 2] > dp[i - 1])dp.push_back(nums[i] + dp[i - 2]);
+                else dp.push_back(dp[i - 1]);
+            }
+        }
+        if (x == 1)
+        {
+            return dp[0];
+        }
+        if (x == 2)
+        {
+            return dp[0] > dp[1] ? dp[0] : dp[1];
+        }
+        return dp[x - 1];
+    }
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        auto mx = max_element(nums.begin(), nums.end());
+        vector<int> dp(*mx + 1);
+        for (int i : nums)
+        {
+            dp[i] += i;
+        }
+        return this->rob(dp);
+    }
+    int longestPalindromeSubseq(string s) {
+        int n = s.size();
+        vector<vector<int>> memo(n, vector<int>(n, -1));
+        return dfs(0, n - 1, s, memo);
+    }
+    int dfs(int l, int r, string& s, vector<vector<int>>& memo) {
+        if (l > r) return 0;
+        if (l == r) return 1;
+        if (memo[l][r] != -1) return memo[l][r];
 
+        if (s[l] == s[r])
+            memo[l][r] = 2 + dfs(l + 1, r - 1, s, memo);
+        else
+            memo[l][r] = max(dfs(l + 1, r, s, memo), dfs(l, r - 1, s, memo));
+
+        return memo[l][r];
+    }
+};
 
 //1,2,3
 //4,5,6
