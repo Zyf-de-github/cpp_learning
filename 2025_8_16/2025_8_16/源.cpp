@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
 using namespace std;
 
 class Solution {
@@ -331,6 +333,95 @@ public:
 
         return memo[l][r];
     }
+    void moveZeroes(vector<int>& nums) {
+        int n = nums.size();
+        int ptr = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (nums[i] != 0)
+            {
+                nums[ptr] = nums[i];
+                ptr++;
+            }
+        }
+        while (ptr != n)
+        {
+            nums[ptr] = 0;
+            ptr++;
+        }
+    }
+
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> m;
+        for (auto it : strs) {
+            string temp = it;
+            sort(temp.begin(),temp.end());
+            m[temp].push_back(it);
+        }
+        vector<vector<string>> v;
+        for (auto& it : m)
+        {
+            vector<string> temp;
+            for (auto& x : it.second)
+            {
+                temp.push_back(x);
+            }
+            v.push_back(temp);
+        }
+        return v;
+    }
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> m;
+        for (auto it : nums)
+        {
+            m.insert(it);
+        }
+        int result = 0;
+        for (auto it : m)
+        {
+            if (m.contains(it - 1))continue;
+            int y = it + 1;
+            while (m.contains(y))y++;
+            result = max(result, y - it);
+        }
+        return result;
+    }
+    int trap(vector<int>& height) {
+        vector<int> lmax;
+        vector<int> rmax;
+        int size = height.size();
+        lmax.push_back(height[0]);
+        rmax.push_back(height[size - 1]);
+        for (int i = 1; i < size; i++)
+        {
+            lmax.push_back(max(lmax[i - 1], height[i]));
+            rmax.push_back(max(rmax[i - 1], height[size - i - 1]));
+        }
+        int result = 0;
+        for (int i = 0; i < size; i++)
+        {
+            int mine = min(lmax[i], rmax[size - 1 - i]);
+            if (height[i] < mine)
+            {
+                result += mine - height[i];
+            }
+        }
+        return result;
+    }
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int i = 0, j = n - 1;
+        while (true)
+        {
+            if (i == m || j == -1)return false;
+
+            if (matrix[i][j] < target)i++;
+            else if (matrix[i][j] > target)j--;
+            else return true;
+        }
+        return false;
+    }
 };
 
 //1,2,3
@@ -339,16 +430,19 @@ public:
 
 int main()
 {
-    Solution s1;
-    //vector<vector<int>> matrix = { {1,2,3},{4,5,6},{7,8,9 } };
-    //vector<vector<int>> matrix2 = { {1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16} };
-    //s1.rotate(matrix2);
-    //vector<int> v = {2, 3, 1, 1, 4};
-    //s1.canJump(v);4
-    //s1.tribonacci(5);
-    //vector<int> matrix = { 10,15,20 };
-    //s1.minCostClimbingStairs(matrix);
-    vector<int> matrix = { 2, 7, 9, 3, 1 };
-    s1.rob(matrix);
+    //Solution s1;
+    ////vector<vector<int>> matrix = { {1,2,3},{4,5,6},{7,8,9 } };
+    ////vector<vector<int>> matrix2 = { {1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16} };
+    ////s1.rotate(matrix2);
+    ////vector<int> v = {2, 3, 1, 1, 4};
+    ////s1.canJump(v);4
+    ////s1.tribonacci(5);
+    ////vector<int> matrix = { 10,15,20 };
+    ////s1.minCostClimbingStairs(matrix);
+    //vector<int> matrix = { 2, 7, 9, 3, 1 };
+    //s1.rob(matrix);
+    Solution2 s;
+    vector<int> a = { 0,1,0,2,1,0,1,3,2,1,2,1 };
+    s.trap(a);
     return 0;
 }
