@@ -1,3 +1,163 @@
+
+
+#if 0
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <functional>
+using namespace std;
+
+class FizzBuzz {
+private:
+    int n;
+    int i = 1;
+    mutex m;
+    condition_variable cv;
+
+public:
+    FizzBuzz(int n) {
+        this->n = n;
+    }
+
+    // printFizz() outputs "fizz".
+    void fizz(function<void()> printFizz) {
+        while (true)
+        {
+            unique_lock<mutex> lock(m);
+            cv.wait(lock, [this]() { return (i % 3 == 0 && i % 5 != 0) || i > n; });
+            if (i > n)return;
+            printFizz();
+            i++;
+            cv.notify_all();
+        }
+    }
+
+    // printBuzz() outputs "buzz".
+    void buzz(function<void()> printBuzz) {
+        while (true)
+        {
+            unique_lock<mutex> lock(m);
+            cv.wait(lock, [this]() { return (i % 3 != 0 && i % 5 == 0) || i > n; });
+            if (i > n)return;
+            printBuzz();
+            i++;
+            cv.notify_all();
+        }
+    }
+
+    // printFizzBuzz() outputs "fizzbuzz".
+    void fizzbuzz(function<void()> printFizzBuzz) {
+        while (true)
+        {
+            unique_lock<mutex> lock(m);
+            cv.wait(lock, [this]() { return (i % 3 == 0 && i % 5 == 0) || i > n; });
+            if (i > n)return;
+            printFizzBuzz();
+            i++;
+            cv.notify_all();
+        }
+    }
+
+    // printNumber(x) outputs "x", where x is an integer.
+    void number(function<void(int)> printNumber) {
+        while (true)
+        {
+            unique_lock<mutex> lock(m);
+            cv.wait(lock, [this]() { return (i % 3 != 0 && i % 5 != 0) || i > n; });
+            if (i > n)return;
+            printNumber(i);
+            i++;
+            cv.notify_all();
+        }
+    }
+};
+#endif
+
+
+
+#if 0
+
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <functional>
+using namespace std;
+
+class ZeroEvenOdd {
+private:
+    int n;
+    int i = 1;          // 当前数字
+    int state = 0;      // 0: 打印0, 1: 打印奇数, 2: 打印偶数
+    mutex m;
+    condition_variable cv;
+
+public:
+    ZeroEvenOdd(int n) {
+        this->n = n;
+    }
+
+    // printNumber(x) 输出 "x"
+    void zero(function<void(int)> printNumber) {
+        for (int cnt = 0; cnt < n; cnt++) {
+            unique_lock<mutex> lock(m);
+            cv.wait(lock, [this]() { return state == 0; });
+            printNumber(0);
+            if (i % 2 == 0)
+                state = 2; // 下一次应该打印偶数
+            else
+                state = 1; // 下一次应该打印奇数
+            cv.notify_all();
+        }
+    }
+
+    void even(function<void(int)> printNumber) {
+        while (true) {
+            unique_lock<mutex> lock(m);
+            cv.wait(lock, [this]() { return state == 2 || i > n; });
+            if (i > n) return;   // 避免死锁
+            printNumber(i++);
+            state = 0;
+            cv.notify_all();
+        }
+    }
+
+    void odd(function<void(int)> printNumber) {
+        while (true) {
+            unique_lock<mutex> lock(m);
+            cv.wait(lock, [this]() { return state == 1 || i > n; });
+            if (i > n) return;   // 避免死锁
+            printNumber(i++);
+            state = 0;
+            cv.notify_all();
+        }
+    }
+};
+
+
+int main() {
+    int n = 10;  // 你可以修改 n 测试
+    ZeroEvenOdd zeo(n);
+
+    auto printNumber = [](int x) { cout << x; };
+
+    thread t1(&ZeroEvenOdd::zero, &zeo, printNumber);
+    thread t2(&ZeroEvenOdd::even, &zeo, printNumber);
+    thread t3(&ZeroEvenOdd::odd, &zeo, printNumber);
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    cout << endl;
+    return 0;
+}
+
+#endif
+
+
+
 #if 0
 
 #include <functional>
@@ -7,11 +167,6 @@
 using namespace std;
 
 
-#include <iostream>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-using namespace std;
 
 class FooBar {
 private:

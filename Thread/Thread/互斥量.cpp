@@ -1,8 +1,5 @@
 #if 0
 
-
-
-
 #include <thread>
 #include <iostream>
 #include <Windows.h>
