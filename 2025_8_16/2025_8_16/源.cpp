@@ -1,3 +1,4 @@
+#if 0
 
 #include <iostream>
 #include <vector>
@@ -446,3 +447,5 @@ int main()
     s.trap(a);
     return 0;
 }
+
+#endif
