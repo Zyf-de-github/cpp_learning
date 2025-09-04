@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <queue>
+#include <new>
 using namespace std;
 
 
@@ -111,11 +112,114 @@ public:
     }
 };
 
+class MyCircularQueue2 {
+private:
+    int ptr_f = 0;
+    int ptr_l = 0;
+    int max = 0;
+    vector<int> fifo;
+public:
+    MyCircularQueue2(int k) {
+        fifo.assign(k, -1);
+        ptr_f = 0;
+        ptr_l = 0;
+        max = k;
+    }
+
+    bool enQueue(int value) {
+        if (ptr_l - ptr_f >= max)return false;
+        fifo[ptr_l % max] = value;
+        ptr_l++;
+        return true;
+    }
+
+    bool deQueue() {
+        if (ptr_f == ptr_l)return false;
+        ptr_f++;
+        return true;
+    }
+
+    int Front() {
+        if (ptr_f == ptr_l)return -1;
+        int temp = ptr_f;
+        ptr_f++;
+        return fifo[temp - 1 % max];
+    }
+
+    int Rear() {
+        if (ptr_f == ptr_l)return -1;
+        int temp = ptr_l;
+        ptr_l--;
+        return fifo[temp - 1 % max];
+    }
+
+    bool isEmpty() {
+        if (ptr_f == ptr_l)return true;
+        return false;
+    }
+
+    bool isFull() {
+        if (ptr_f - ptr_l + 1 == max)return true;
+        return false;
+    }
+};
+class MyCircularQueue1 {
+private:
+    int ptr_f = 0;
+    int ptr_l = 0;
+    int max = 0;
+    vector<int> fifo;
+public:
+    MyCircularQueue1(int k) {
+        fifo.assign(k, -1);
+        max = k;
+    }
+
+    bool enQueue(int value) {
+        if (isFull()) return false;
+        fifo[ptr_l % max] = value;
+        ptr_l++;
+        return true;
+    }
+
+    bool deQueue() {
+        if (isEmpty()) return false;
+        ptr_f++;
+        return true;
+    }
+
+    int Front() {
+        if (isEmpty()) return -1;
+        return fifo[ptr_f % max];
+    }
+
+    int Rear() {
+        if (isEmpty()) return -1;
+        return fifo[(ptr_l - 1 + max) % max];
+    }
+
+    bool isEmpty() {
+        return ptr_f == ptr_l;
+    }
+
+    bool isFull() {
+        return (ptr_l - ptr_f) == max;
+    }
+};
+
 
 int main()
 {
-
-    Solution test;
+    MyCircularQueue1* circularQueue = new MyCircularQueue1(3); // 设置长度为 3
+    circularQueue->enQueue(1);  // 返回 true
+    circularQueue->enQueue(2);  // 返回 true
+    circularQueue->enQueue(3);  // 返回 true
+    circularQueue->enQueue(4);  // 返回 false，队列已满
+    circularQueue->Rear();  // 返回 3
+    circularQueue->isFull();  // 返回 true
+    circularQueue->deQueue();  // 返回 true
+    circularQueue->enQueue(4);  // 返回 true
+    circularQueue->Rear();  // 返回 4
 
     return 0;
 }

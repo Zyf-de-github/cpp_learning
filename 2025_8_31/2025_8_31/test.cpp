@@ -1,4 +1,4 @@
-#if 1
+#if 0
 
 #include <iostream>
 #include <vector>
@@ -261,6 +261,90 @@ public:
                 }
             }
         }
+    }
+    int removeDuplicates(vector<int>& nums)
+    {
+        if (nums.empty()) return 0;
+        int i = 1;
+        int count = 1;
+        for (int j = 1; j < nums.size(); j++)
+        {
+            if (nums[j] == nums[j - 1])
+            {
+                count++;
+            }
+            else
+            {
+                count = 1;
+            }
+            if (count <= 2)
+            {
+                nums[i++] = nums[j];
+            }
+        }
+        return i;
+    }
+    int maxProfit(vector<int>& prices) {
+        int ans = 0;
+        int min_num = prices[0];
+        for (int i = 1; i < prices.size(); i++)
+        {
+            ans = max(ans, prices[i] - min_num);
+            min_num = min(min_num, prices[i]);
+        }
+        return ans;
+    }
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int l = 0;
+        int size = numbers.size();
+        int r = size - 1;
+        while (l < r)
+        {
+            if (numbers[l] + numbers[r] == target)
+            {
+                return { l + 1,r + 1 };
+            }
+            else if (numbers[l] + numbers[r] > target)
+            {
+                r--;
+            }
+            else if (numbers[l] + numbers[r] < target)
+            {
+                l++;
+            }
+        }
+        return { 0,0 };
+    }
+    bool isPalindrome(string s) {
+        string result;
+        for (char c : s)
+        {
+            if (isalnum(static_cast<unsigned char>(c)))
+            {
+                result += tolower(static_cast<unsigned char>(c));
+            }
+        }
+        string x(result.rbegin(), result.rend());
+        if (x == result) return true;
+        return false;
+    }
+    int maxProfit(vector<int>& prices)
+    {
+        int sum = 0;
+        int num = 10000;
+        for (int i = 0; i < prices.size(); i++)
+        {
+            if (num < prices[i])
+            {
+                sum += prices[i] - num;
+                num = 10000;
+            }
+            if (i + 1 < prices.size() && prices[i] < prices[i + 1])
+            {
+                num = prices[i];
+            }
+        }
+        return sum;
     }
 };
 
