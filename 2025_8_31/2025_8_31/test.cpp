@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <set>
 using namespace std;
 
 
@@ -114,6 +115,153 @@ public:
         sort(nums.begin() + mid+1, nums.end());
         return;
     }
+    int lengthOfLIS(vector<int>& nums) {
+        vector<vector<int>> dp;
+        int size = nums.size();
+        dp.push_back({ nums[0], 1 });
+        for (int i = 1; i < size; i++)
+        {
+            int temp = 1;
+            for (int j = dp.size() - 1; j >= 0; j--)
+            {
+                if (nums[i] > dp[j][0])
+                {
+                    temp = max(temp, dp[j][1] + 1);
+                }
+            }
+            dp.push_back({ nums[i],temp });
+        }
+        int num = 0;
+        for (int i = 0; i < dp.size(); i++)
+        {
+            num = max(num, dp[i][1]);
+        }
+        return num;
+    }
+    int findNumberOfLIS(vector<int>& nums) {
+        vector<vector<int>> dp;
+        int size = nums.size();
+        dp.push_back({ nums[0], 1 , 1 });
+        for (int i = 1; i < size; i++)
+        {
+            int len = 1;
+            int time = 1;
+            for (int j = 0; j < i; j++)
+            {
+                if (nums[i] > dp[j][0])
+                {
+                    if (dp[j][1] + 1 > len)
+                    {
+                        len = dp[j][1] + 1;
+                        time = dp[j][2];
+                    }
+                    else if (dp[j][1] + 1 == len)
+                    {
+                        time = time + dp[j][2];
+                    }
+                }
+            }
+            dp.push_back({ nums[i],len ,time });
+        }
+        int num = 0;
+        for (int i = 0; i < dp.size(); i++)
+        {
+            num = max(num, dp[i][1]);
+        }
+        int ans = 0;
+        for (int i = dp.size() - 1; i >= 0; i--)
+        {
+            if (dp[i][1] == num) ans += dp[i][2];
+        }
+        return ans;
+    }
+    int pivotIndex(vector<int>& nums) {
+        vector<int> ltr;
+        vector<int> rtl;
+        int size = nums.size();
+        for (int i = 0; i < size; i++)
+        {
+            if (i == 0)
+            {
+                ltr.push_back(nums[i]);
+                rtl.push_back(nums[size - i - 1]);
+            }
+            else
+            {
+                ltr.push_back(nums[i] + ltr[i - 1]);
+                rtl.push_back(nums[size - i - 1] + rtl[i - 1]);
+            }
+        }
+        int ptr = 0;
+        while (ptr < size)
+        {
+            if (ltr[ptr] != rtl[size - 1 - ptr])ptr++;
+            else return ptr;
+        }
+        return -1;
+    }
+    int findMiddleIndex(vector<int>& nums) {
+        vector<int> ltr;
+        vector<int> rtl;
+        int size = nums.size();
+        for (int i = 0; i < size; i++)
+        {
+            if (i == 0)
+            {
+                ltr.push_back(nums[i]);
+                rtl.push_back(nums[size - i - 1]);
+            }
+            else
+            {
+                ltr.push_back(nums[i] + ltr[i - 1]);
+                rtl.push_back(nums[size - i - 1] + rtl[i - 1]);
+            }
+        }
+        int ptr = 0;
+        while (ptr < size)
+        {
+            if (ltr[ptr] != rtl[size - 1 - ptr])ptr++;
+            else return ptr;
+        }
+        return -1;
+    }
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        set<int> x;
+        set<int> y;
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (matrix[i][j] == 0)
+                {
+                    x.insert(i);
+                    y.insert(j);
+                }
+            }
+        }
+        for (int i = 0; i < m; i++)
+        {
+            if (x.find(i) != x.end())
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i][j] = 0;
+                }
+            }
+            else
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (y.find(j) != y.end())
+                    {
+                        matrix[i][j] = 0;
+                    }
+                }
+            }
+        }
+    }
 };
 
 class Solution {
@@ -159,7 +307,9 @@ int main()
     //Solution test;
     ////test.merge(a);
     //test.nextPermutation(a);
-
+    vector<int> a = { 1,3,5,4,7 };
+    Solution1 test;
+    test.findNumberOfLIS(a);
 
 
 	return 0;
