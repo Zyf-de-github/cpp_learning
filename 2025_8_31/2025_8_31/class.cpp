@@ -6,6 +6,7 @@
 #include <set>
 #include <unordered_set>
 #include <deque>
+#include <stack>
 
 using namespace std;
 
@@ -185,3 +186,114 @@ public:
         return sum;
     }
 };
+class Solution {
+    stack<char> s;
+    string ans;
+public:
+    string interpret(string command) {
+        ans.clear();
+        for (int i = 0; i < command.size(); i++)
+        {
+            if (command[i] == 'G')ans += command[i];
+            else if (command[i] == ')')
+            {
+                string temp;
+                while (s.top() != '(')
+                {
+                    temp = temp + s.top();
+                    s.pop();
+                }
+                s.pop();
+                if (temp == "")ans += "o";
+                else if (temp == "la") ans += "al";
+            }
+            else s.push(command[i]);
+        }
+        return ans;
+    }
+};
+class ATM {
+    vector<vector<int>> v;
+public:
+    ATM() {
+        v = { {0,20},{0,50},{0,100},{0,200},{0,500} };
+    }
+
+    void deposit(vector<int> banknotesCount) {
+        for (int i = 0; i < banknotesCount.size(); i++)
+        {
+            v[i][0] += banknotesCount[i];
+        }
+    }
+
+    vector<int> withdraw(int amount) {
+        int sum = amount;
+        vector<int> temp(5, 0);
+        for (int i = 4; i >= 0; i--) {
+            if (sum == 0) break;
+            int take = min(sum / v[i][1], v[i][0]);
+            temp[i] = take;
+            sum -= take * v[i][1];
+        }
+
+        if (sum != 0) return { -1 };
+        for (int i = 0; i < 5; i++) v[i][0] -= temp[i];
+
+        return temp;
+    }
+};
+class NeighborSum {
+    vector<vector<int>> v;
+    int m;
+    int n;
+public:
+    NeighborSum(vector<vector<int>>& grid) {
+        v = grid;
+        m = grid.size();
+        n = grid[0].size();
+    }
+
+    int adjacentSum(int value) {
+        vector<int> x = finding(value);
+        if (x[0] == -1)return 0;
+        int sum = 0;
+        if (x[0] - 1 >= 0)sum += v[x[0] - 1][x[1]];
+        if (x[0] + 1 < m)sum += v[x[0] + 1][x[1]];
+        if (x[1] - 1 >= 0)sum += v[x[0]][x[1] - 1];
+        if (x[1] + 1 < n)sum += v[x[0]][x[1] + 1];
+        return sum;
+    }
+
+    int diagonalSum(int value) {
+        vector<int> x = finding(value);
+        if (x[0] == -1)return 0;
+        int sum = 0;
+        if (x[0] - 1 >= 0 && x[1] - 1 >= 0)sum += v[x[0] - 1][x[1] - 1];
+        if (x[0] + 1 < m && x[1] - 1 >= 0)sum += v[x[0] + 1][x[1] - 1];
+        if (x[1] + 1 < n && x[0] - 1 >= 0)sum += v[x[0] - 1][x[1] + 1];
+        if (x[1] + 1 < n && x[0] + 1 < m)sum += v[x[0] + 1][x[1] + 1];
+        return sum;
+    }
+
+    vector<int> finding(int value)
+    {
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (v[i][j] == value)
+                    return { i,j };
+            }
+        }
+        return { -1,-1 };
+    }
+};
+class Solution {
+public:
+    int mechanicalAccumulator(int target) {
+        return target ? target + mechanicalAccumulator(target - 1) : 0;
+    }
+};
+
+
+
