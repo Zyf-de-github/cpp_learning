@@ -99,7 +99,21 @@ public:
         if (j - 1 >= 0 && grid[i][j - 1] == 1) { grid[i][j - 1] = 3; change = true; }
     }
 };
-class Solution {
+class Solution 
+{
+private:
+    struct ListNode 
+    {
+        int val;
+        ListNode* next;
+        ListNode() : val(0), next(nullptr) {}
+        ListNode(int x) : val(x), next(nullptr) {}
+        ListNode(int x, ListNode* next) : val(x), next(next) {}
+    };
+    int finding(int max, int min)
+    {
+        return min == 0 ? max : finding(min, max % min);
+    }
 public:
     int findDuplicate(vector<int>& nums) {
         sort(nums.begin(), nums.end());
@@ -110,6 +124,30 @@ public:
         }
         return 0;
     }
+    vector<int> findWordsContaining(vector<string>& words, char x) {
+        vector<int> v;
+        for (int i = 0; i < words.size(); i++)
+        {
+            if (words[i].find(x) != string::npos)v.push_back(i);
+        }
+        return v;
+    }
+    ListNode* insertGreatestCommonDivisors(ListNode* head) {
+        ListNode* ptrl = head;
+        if (head->next == nullptr) return head;
+        ListNode* ptrr = head->next;
+        while (ptrr != nullptr)
+        {
+            int mid = finding(max(ptrl->val, ptrr->val), min(ptrl->val, ptrr->val));
+            ListNode* temp = new ListNode(mid);
+            temp->next = ptrr;
+            ptrl->next = temp;
+            ptrl = ptrr;
+            ptrr = ptrr->next;
+        }
+        return head;
+    }
+
 };
 
 class MyCircularQueue2 {
