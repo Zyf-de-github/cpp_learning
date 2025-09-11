@@ -120,6 +120,105 @@ public:
         }
         return head;
     }
+    vector<vector<int>> groupThePeople(vector<int>& groupSizes) {
+        unordered_map<int, vector<int>> m;
+        for (int i = 0; i < groupSizes.size(); i++)
+        {
+            m[groupSizes[i]].push_back(i);
+        }
+        vector<vector<int>> ans;
+        for (auto it : m)
+        {
+            int temp = it.first;
+            vector<int> vtemp;
+            for (int i = 0; i < it.second.size(); i++)
+            {
+                vtemp.push_back(it.second[i]);
+                if ((i + 1) % temp == 0)
+                {
+                    ans.push_back(vtemp);
+                    vtemp.clear();
+                }
+            }
+        }
+        return ans;
+    }
+    vector<vector<int>> sortMatrix(vector<vector<int>>& grid) {
+        int n = grid.size();
+        if (n == 1)return grid;
+        for (int i = 1; i < n; i++)
+        {
+            int x = n - 1 - i;
+            int y = 0;
+            vector<int>temp;
+            while (x < n)
+            {
+                temp.push_back(grid[x][y]);
+                x++;
+                y++;
+            }
+            sort(temp.begin(), temp.end());
+            x--;
+            y--;
+            for (int j = 0; j < temp.size(); j++, x--, y--)
+            {
+                grid[x][y] = temp[j];
+            }
+        }
+        for (int i = 1; i < n - 1; i++)
+        {
+            int x = 0;
+            int y = n - 1 - i;
+            vector<int>temp;
+            while (y < n)
+            {
+                temp.push_back(grid[x][y]);
+                x++;
+                y++;
+            }
+            sort(temp.begin(), temp.end());
+            x--;
+            y--;
+            for (int j = temp.size() - 1; j >= 0; j--, x--, y--)
+            {
+                grid[x][y] = temp[j];
+            }
+        }
+        return grid;
+    }
+    bool isStrictlyPalindromic(int n) {
+        return false;
+    }
+    vector<string> summaryRanges(vector<int>& nums) {
+        if (nums.empty())return{};
+        vector<string> ans;
+        sort(nums.begin(), nums.end());
+        int min = nums[0];
+        int max = min;
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] > nums[i - 1] + 1)
+            {
+                if (max == min)
+                    ans.push_back(to_string(max));
+                else
+                    ans.push_back(to_string(min) + "->" + to_string(max));
+
+                min = nums[i];
+                max = min;
+            }
+            else
+            {
+                max = nums[i];
+            }
+        }
+        if (max == min)
+            ans.push_back(to_string(max));
+        else
+            ans.push_back(to_string(min) + "->" + to_string(max));
+        return ans;
+    }
+
 };
 
 void main()
