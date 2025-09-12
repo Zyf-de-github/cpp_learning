@@ -11,6 +11,44 @@
 using namespace std;
 
 
+
+class Solution1 {
+    struct TreeNode 
+    {
+        int val;
+        TreeNode* left;
+        TreeNode* right;
+        TreeNode() : val(0), left(nullptr), right(nullptr) {}
+        TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+        TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
+    };
+private:
+    int ans = 0;
+    int res = 0;
+public:
+    int deepestLeavesSum(TreeNode* root) {
+        finding(root, 0);
+        return res;
+    }
+    void finding(TreeNode* root, int x)
+    {
+        if (root == nullptr)return;
+        x++;
+        if (x > ans)
+        {
+            ans = x;
+            res = 0;
+            res += root->val;
+        }
+        else if (x == ans)
+        {
+            res += root->val;
+        }
+        finding(root->left, x);
+        finding(root->right, x);
+        return;
+    }
+};
 class Solution {
     
     struct ListNode1 {
@@ -218,7 +256,78 @@ public:
             ans.push_back(to_string(min) + "->" + to_string(max));
         return ans;
     }
-
+    int maxSatisfaction(vector<int>& satisfaction) {
+        sort(satisfaction.begin(), satisfaction.end(), [](int a, int b) {
+            return a > b;
+            });
+        int ans = 0;
+        int temp = 0;
+        for (auto it : satisfaction)
+        {
+            temp += it;
+            if (temp <= 0)break;
+            ans += temp;
+        }
+        return ans;
+    }
+    int garbageCollection(vector<string>& garbage, vector<int>& travel) {
+        int ptr_m = 0;
+        int ptr_p = 0;
+        int ptr_g = 0;
+        int sum = 0;
+        int count_m = 0;
+        int count_p = 0;
+        int count_g = 0;
+        for (int i = 0; i < garbage.size(); i++)
+        {
+            count_m = 0;
+            count_p = 0;
+            count_g = 0;
+            for (char c : garbage[i])
+            {
+                if (c == 'M') count_m++;
+                if (c == 'P') count_p++;
+                if (c == 'G') count_g++;
+            }
+            if (count_m)
+            {
+                while (ptr_m < i)
+                {
+                    sum += travel[ptr_m];
+                    ptr_m++;
+                }
+                sum += count_m;
+            }
+            if (count_p)
+            {
+                while (ptr_p < i)
+                {
+                    sum += travel[ptr_p];
+                    ptr_p++;
+                }
+                sum += count_p;
+            }
+            if (count_g)
+            {
+                while (ptr_g < i)
+                {
+                    sum += travel[ptr_g];
+                    ptr_g++;
+                }
+                sum += count_g;
+            }
+        }
+        return sum;
+    }
+    int maxCoins(vector<int>& piles) {
+        int sum = 0;
+        sort(piles.begin(), piles.end());//1 2 2 4 7 8 
+        for (int i = piles.size() / 3; i < piles.size(); i += 2)
+        {
+            sum += piles[i];
+        }
+        return sum;
+    }
 };
 
 void main()
