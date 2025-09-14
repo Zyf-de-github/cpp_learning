@@ -328,6 +328,89 @@ public:
         }
         return sum;
     }
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int size = nums.size();
+        vector<int>pre(size, 1);
+        vector<int>les(size, 1);
+        vector<int>ans(size, 0);
+        for (int i = 1; i < size; i++)
+        {
+            pre[i] = pre[i - 1] * nums[i - 1];
+        }
+        for (int i = size - 2; i >= 0; i--)
+        {
+            les[i] = les[i + 1] * nums[i + 1];
+        }
+        for (int i = 0; i < size; i++)
+        {
+            ans[i] = pre[i] * les[i];
+        }
+        return ans;
+    }
+    int firstMissingPositive(vector<int>& nums) {
+        int n = nums.size();
+        for (int i = 0; i < n; i++) {
+            while (1 <= nums[i] && nums[i] <= n && nums[i] != nums[nums[i] - 1]) {
+                int j = nums[i] - 1;
+                swap(nums[i], nums[j]);
+            }
+        }
+        for (int i = 0; i < n; i++)
+        {
+            if (nums[i] != i + 1)
+            {
+                return i + 1;
+            }
+        }
+        return n + 1;
+    }
+    ListNode* getIntersectionNode(ListNode* headA, ListNode* headB) {
+        ListNode* tempA = headA;
+        ListNode* tempB = headB;
+        while (tempA != tempB)
+        {
+            if (tempA == NULL)
+            {
+                tempA = headB;
+            }
+            else
+            {
+                tempA = tempA->next;
+            }
+
+            if (tempB == NULL)
+            {
+                tempB = headA;
+            }
+            else
+            {
+                tempB = tempB->next;
+            }
+        }
+        return tempA;
+    }
+    bool isPalindrome(ListNode* head) {
+        deque<int> dq;
+        while (head != nullptr)
+        {
+            dq.push_back(head->val);
+            head = head->next;
+        }
+        while (!dq.empty())
+        {
+            if (dq.front() != dq.back())return false;
+            else if (dq.size() > 1)
+            {
+                dq.pop_back();
+                dq.pop_front();
+            }
+            else
+            {
+                return true;
+            }
+        }
+        return true;
+    }
 };
 
 void main()
