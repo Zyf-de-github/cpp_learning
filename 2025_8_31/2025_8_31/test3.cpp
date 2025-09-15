@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <map>
 #include <queue>
 #include <new>
 #include <stack>
@@ -411,6 +412,71 @@ public:
         }
         return true;
     }
+    bool CheckPermutation(string s1, string s2) {
+        if (s1.size() != s2.size())return false;
+        map<char, int> m;
+        for (auto it : s1)
+        {
+            m[it]++;
+        }
+        for (auto it : s2)
+        {
+            m[it]--;
+        }
+        for (auto it : m)
+        {
+            if (it.second != 0)return false;
+        }
+        return true;
+    }
+    string replaceSpaces(string S, int length) {
+        string s;
+        for (int i = 0; i < length; i++)
+        {
+            if (S[i] == ' ')s += "%20";
+            else s += S[i];
+        }
+        return s;
+    }
+    bool canPermutePalindrome(string s) {
+        map<char, int> x;
+        int i = 0;
+        for (auto it : s)
+        {
+            x[it]++;
+        }
+        for (auto it : x)
+        {
+            if (it.second % 2 == 1)
+            {
+                if (i == 0)i++;
+                else return false;
+            }
+        }
+        return true;
+    }
+    string compressString(string S) {
+        string x;
+        char a = S[0];
+        x += a;
+        int times = 1;
+        int size = S.size();
+        for (int i = 1; i < size; i++)
+        {
+            if (S[i] == S[i - 1])times++;
+            else
+            {
+                x += to_string(times);
+                a = S[i];
+                x += a;
+                times = 1;
+            }
+        }
+        x += to_string(times);
+        if (x.size() < size)return x;
+        return S;
+    }
+
 };
 
 void main()
