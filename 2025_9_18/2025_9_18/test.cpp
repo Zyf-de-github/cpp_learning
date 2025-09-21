@@ -1,3 +1,4 @@
+#if 0
 #include <iostream>
 #include <iomanip>
 #include <math.h>
@@ -196,3 +197,6 @@ int main()
 
 	return 0;
 }
+
+
+#endif
