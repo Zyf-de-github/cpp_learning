@@ -5,7 +5,9 @@
 #include <cmath>
 #include <vector>
 #include <queue>
+#include <set>
 #include <stack>
+#include <map>
 using namespace std;
 
 
@@ -161,5 +163,87 @@ public:
         return ans;
     }
 };
+class Solution4 {
+public:
+    int waysToChange(int n) {
+        vector<int> dp(n + 1);
+        dp[0] = 1;
+        for (int i = 1; i <= n; i++)
+        {
+            if (i > 24)
+            {
+                dp[i] = dp[i - 25] + dp[i - 10] + dp[i - 5] + dp[i - 1];
+            }
+            else if (i > 9)
+            {
+                dp[i] = dp[i - 10] + dp[i - 5] + dp[i - 1];
+            }
+            else if (i > 4)
+            {
+                dp[i] = dp[i - 5] + dp[i - 1];
+            }
+            else
+            {
+                dp[i] = dp[i - 1];
+            }
+        }
+        return dp[n];
+    }
+};
+class Solution5 {
+public:
+    void merge(vector<int>& A, int m, vector<int>& B, int n) {
+        int ptr = m + n - 1;
+        m = m - 1;
+        n = n - 1;
+        while (n >= 0)
+        {
+            if (m == -1 || A[m] < B[n])
+            {
+                A[ptr] = B[n];
+                ptr--;
+                n--;
+            }
+            else
+            {
+                A[ptr] = A[m];
+                ptr--;
+                m--;
+            }
+        }
+        return;
+    }
+};
+class Solution6 {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> ans;
+        map<string, vector<int>> m;
+        for (int i = 0; i < strs.size(); i++)
+        {
+            string temp = strs[i];
+            sort(temp.begin(), temp.end());
+            m[temp].push_back(i);
+        }
+        for (auto it : m)
+        {
+            vector<string> temp;
+            for (int i = 0; i < it.second.size(); i++)
+            {
+                temp.push_back(strs[it.second[i]]);
+            }
+            ans.push_back(temp);
+        }
+        return ans;
+    }
+};
 
+
+
+int main()
+{
+    Solution4 s;
+    cout<<s.waysToChange(26);
+    return 0;
+}
 #endif
