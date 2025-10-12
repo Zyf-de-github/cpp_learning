@@ -237,13 +237,108 @@ public:
         return ans;
     }
 };
+class Solution7 {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if (matrix.empty())return false;
+        if (matrix[0].empty())return false;
+
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int len_min = 0;
+        int roll_min = 0;
+        int len_max = 0;
+        int roll_max = 0;
 
 
+        int flag = 1;
+        int total = 0;
+        for (int i = 0; i < m; i++)
+        {
+            if (flag)
+            {
+                if (matrix[i][0] <= target && matrix[i][n - 1] >= target)
+                {
+                    flag = 0;
+                    roll_min = i;
+                }
+            }
+            else total += 1;
+        }
+        roll_max = roll_min + total;
 
+        flag = 1;
+        total = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (flag)
+            {
+                if (matrix[0][i] <= target && matrix[m - 1][i] >= target)
+                {
+                    flag = 0;
+                    len_min = i;
+                }
+            }
+            else total += 1;
+        }
+        len_max = len_min + total;
+
+        for (int i = roll_min; i <= roll_max; i++)
+        {
+            for (int j = len_min; j <= len_max; j++)
+            {
+                if (matrix[i][j] == target)return true;
+            }
+        }
+        return false;
+    }
+};
+class Solution8 {
+public:
+    int findString(vector<string>& words, string s) {
+        int lptr = 0;
+        int rptr = words.size() - 1;
+        while (lptr <= rptr)
+        {
+            while (words[lptr] == "")lptr++;
+            while (words[rptr] == "")rptr--;
+            int temp = (rptr + lptr) / 2;
+            while (words[temp] == "")temp--;
+            if (words[temp] > s)rptr = temp - 1;
+            else if (words[temp] < s)lptr = temp + 1;
+            else return temp;
+        }
+        return -1;
+    }
+};
+class Solution9 {
+public:
+    void wiggleSort(vector<int>& nums) {
+        vector<int>temp = nums;
+        sort(temp.begin(), temp.end());
+        int size = temp.size();
+        int state = 0;
+        for (int i = 0; i < size; i++)
+        {
+            if (state == 0)
+            {
+                nums[i] = temp[i / 2 + size / 2];
+                state = 1;
+            }
+            else
+            {
+                nums[i] = temp[i / 2];
+                state = 0;
+            }
+        }
+        return;
+    }
+};
 int main()
 {
-    Solution4 s;
-    cout<<s.waysToChange(26);
+    vector<int> v = { 1,3,2 };
+    Solution9 s;
+    s.wiggleSort(v);
     return 0;
 }
 #endif
