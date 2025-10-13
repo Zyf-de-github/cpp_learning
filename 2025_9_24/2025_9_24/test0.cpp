@@ -10,6 +10,14 @@
 #include <map>
 using namespace std;
 
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
+};
 
 class StackOfPlates {
 public:
@@ -68,6 +76,81 @@ public:
             num = (int)v.size() - 1;
         }
 
+        return temp;
+    }
+};
+class SortedStack {
+    vector<int> v;
+public:
+    SortedStack() {
+        v.clear();
+    }
+
+    void push(int val) {
+        v.push_back(val);
+        sort(v.begin(), v.end());
+        return;
+    }
+
+    void pop() {
+        if (!v.empty())v.erase(v.begin());
+    }
+
+    int peek() {
+        if (v.empty())return -1;
+        return v[0];
+    }
+
+    bool isEmpty() {
+        return v.empty();
+    }
+};
+class AnimalShelf {
+public:
+    vector<vector<int>> v;
+    AnimalShelf() {
+
+    }
+
+    void enqueue(vector<int> animal) {
+        v.push_back(animal);
+    }
+
+    vector<int> dequeueAny() {
+        vector<int> temp = { -1,-1 };
+        if (v.empty())return temp;
+        temp = v[0];
+        v.erase(v.begin());
+        return temp;
+    }
+
+    vector<int> dequeueDog() {
+        int size = v.size();
+        vector<int> temp = { -1,-1 };
+        for (int i = 0; i < size; i++)
+        {
+            if (v[i][1] == 1)
+            {
+                temp = v[i];
+                v.erase(v.begin() + i);
+                break;
+            }
+        }
+        return temp;
+    }
+
+    vector<int> dequeueCat() {
+        int size = v.size();
+        vector<int> temp = { -1,-1 };
+        for (int i = 0; i < size; i++)
+        {
+            if (v[i][1] == 0)
+            {
+                temp = v[i];
+                v.erase(v.begin() + i);
+                break;
+            }
+        }
         return temp;
     }
 };
@@ -334,6 +417,16 @@ public:
         return;
     }
 };
+class Solution10 {
+public:
+    int flag = 1;
+    bool isValidBST(TreeNode* root, long left = LONG_MIN, long right = LONG_MAX) {
+        if (root == nullptr)return true;
+        long x = root->val;
+        return left < x && x < right && isValidBST(root->left, left, x) && isValidBST(root->right, x, right);
+    }
+};
+
 int main()
 {
     vector<int> v = { 1,3,2 };
