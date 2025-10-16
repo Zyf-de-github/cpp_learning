@@ -115,7 +115,7 @@ public:
         return !((x != 0 || y != 0) && state == 0);
     }
 };
-class Solution {
+class Solution5 {
 public:
     int maximumWealth(vector<vector<int>>& accounts) {
         int ans = 0;
@@ -131,7 +131,7 @@ public:
         return ans;
     }
 };
-class Solution {
+class Solution6 {
 public:
     int diagonalSum(vector<vector<int>>& mat) {
         int ans = 0;
@@ -145,13 +145,13 @@ public:
         return ans;
     }
 };
-class Solution {
+class Solution7 {
 public:
     int countOdds(int low, int high) {
         return (high + 1) / 2 - low / 2;
     }
 };
-class Solution {
+class Solution8 {
 public:
     double average(vector<int>& salary) {
         int nmax = INT_MIN;
@@ -166,7 +166,7 @@ public:
         return (ans - nmin - nmax) / (salary.size() - 2.0);
     }
 };
-class Solution {
+class Solution9 {
 public:
     bool lemonadeChange(vector<int>& bills) {
         int m5 = 0;
@@ -198,7 +198,7 @@ public:
         return true;
     }
 };
-class Solution {
+class Solution10 {
 public:
     int largestPerimeter(vector<int>& nums) {
         sort(nums.begin(), nums.end());
@@ -210,7 +210,7 @@ public:
         return 0;
     }
 };
-class Solution {
+class Solution11 {
 public:
     bool checkStraightLine(vector<vector<int>>& coordinates) {
         if (coordinates[0][0] == coordinates[1][0])
