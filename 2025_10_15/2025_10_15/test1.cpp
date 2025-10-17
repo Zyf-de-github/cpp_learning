@@ -11,6 +11,16 @@
 #include <unordered_map>
 using namespace std;
 
+
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
+
+
 class Solution0 {
 public:
     string toLowerCase(string s) {
@@ -242,18 +252,187 @@ public:
         return true;
     }
 };
+class Solution12 {
+public:
+    string multiply(string num1, string num2) {
+        if (num1 == "0" || num2 == "0")return "0";
+        int size1 = num1.size();
+        int size2 = num2.size();
+        vector<int> ans(size1 + size2, 0);
+        for (int i = size1 - 1; i >= 0; i--)
+        {
+            for (int j = size2 - 1; j >= 0; j--)
+            {
+                int mul = (num1[i] - '0') * (num2[j] - '0');
+                int sum = mul + ans[i + j + 1];
+                ans[i + j + 1] = sum % 10;
+                ans[i + j] += sum / 10;
+            }
+        }
+        string x;
+        int flag = 1;
+        for (auto it : ans)
+        {
+            if (it == 0 && flag) continue;
+            flag = 0;
+            x = x + to_string(it);
+        }
+        return x;
+    }
+};
+class Solution13 {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        l1 = reverseList(l1);
+        l2 = reverseList(l2);
+        int temp = 0;
+        ListNode* l3 = new ListNode(0);
+        ListNode* ptr = l3;
+        while (l1 != nullptr || l2 != nullptr)
+        {
+            if (l1 == nullptr)
+            {
+                int num = l2->val + temp;
+                temp = num / 10;
+                ptr->val = num % 10;
+                ListNode* x = new ListNode(0);
+                ptr->next = x;
+                ptr = x;
+            }
+            else if (l2 == nullptr)
+            {
+                int num = l1->val + temp;
+                temp = num / 10;
+                ptr->val = num % 10;
+                ListNode* x = new ListNode(0);
+                ptr->next = x;
+                ptr = x;
+            }
+            else
+            {
+                int num = l1->val + l2->val + temp;
+                temp = num / 10;
+                ptr->val = num % 10;
+                ListNode* x = new ListNode(0);
+                ptr->next = x;
+                ptr = x;
+            }
+            if (l1)l1 = l1->next;
+            if (l2)l2 = l2->next;
+        }
+        if (temp != 0)
+        {
+            ptr->val = temp;
+            ListNode* x = new ListNode(0);
+            ptr->next = x;
+            ptr = x;
+        }
+        l3 = reverseList(l3);
+        return l3->next;
+    }
+    ListNode* reverseList(ListNode* head) {
+        ListNode* list = new ListNode();
+        while (head)
+        {
+            list->val = head->val;
+            ListNode* temp = new ListNode();
+            temp->next = list;
+            list = temp;
+            head = head->next;
+        }
+        return list->next;
+    }
+};
+class Solution14 {
+public:
+    string tictactoe(vector<string>& board) {
+        int n = board.size();
+        char winner = findWinner(board, n);
 
+        bool hasEmpty = false;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == ' ') {
+                    hasEmpty = true;
+                    break;
+                }
+            }
+            if (hasEmpty) break;
+        }
 
+        if (winner != ' ') return string(1, winner);
+        return hasEmpty ? "Pending" : "Draw";
+    }
 
+private:
+    char findWinner(const vector<string>& board, int n) {
+        // 检查每一行
+        for (int i = 0; i < n; i++) {
+            char first = board[i][0];
+            if (first == ' ') continue;
+            bool same = true;
+            for (int j = 1; j < n; j++) {
+                if (board[i][j] != first) {
+                    same = false;
+                    break;
+                }
+            }
+            if (same) return first;
+        }
 
+        // 检查每一列
+        for (int j = 0; j < n; j++) {
+            char first = board[0][j];
+            if (first == ' ') continue;
+            bool same = true;
+            for (int i = 1; i < n; i++) {
+                if (board[i][j] != first) {
+                    same = false;
+                    break;
+                }
+            }
+            if (same) return first;
+        }
 
+        // 检查主对角线
+        {
+            char first = board[0][0];
+            if (first != ' ') {
+                bool same = true;
+                for (int i = 1; i < n; i++) {
+                    if (board[i][i] != first) {
+                        same = false;
+                        break;
+                    }
+                }
+                if (same) return first;
+            }
+        }
 
+        // 检查副对角线
+        {
+            char first = board[0][n - 1];
+            if (first != ' ') {
+                bool same = true;
+                for (int i = 1; i < n; i++) {
+                    if (board[i][n - 1 - i] != first) {
+                        same = false;
+                        break;
+                    }
+                }
+                if (same) return first;
+            }
+        }
 
+        return ' ';
+    }
+};
 
+int main()
+{
 
-
-
-
+    return 0;
+}
 
 
 #endif
