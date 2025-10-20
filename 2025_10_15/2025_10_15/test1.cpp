@@ -98,9 +98,115 @@ public:
         return ptr + 1900;
     }
 };
+class Solution3 {
+public:
+    vector<vector<int>> ans;
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        for (int i = 0; i < candidates.size(); i++)
+        {
+            vector<int> temp;
+            dfs(temp, i, target, candidates);
+        }
+        return ans;
+    }
+    void dfs(vector<int> temp, int i, int target, vector<int>& candidates)
+    {
+        if (candidates[i] > target)return;
+        temp.push_back(candidates[i]);
+        target -= candidates[i];
+        if (target == 0)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        for (int j = 0; j + i < candidates.size(); j++)
+        {
+            if (candidates[i + j] > target)break;
+            dfs(temp, i + j, target, candidates);
+        }
+        return;
+    }
+};
+class Solution4 {
+public:
+    vector<vector<int>> ans;
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<int> path;
+        dfs(path, 0, target, candidates);
+        return ans;
+    }
+    void dfs(vector<int>& path, int start, int target, vector<int>& candidates)
+    {
+        if (target == 0)
+        {
+            ans.push_back(path);
+            return;
+        }
+        for (int i = start; i < candidates.size(); i++)
+        {
+            if (candidates[i] > target)break;
+            if (i > start && candidates[i] == candidates[i - 1]) continue;
+            path.push_back(candidates[i]);
+            dfs(path, i + 1, target - candidates[i], candidates);
+            path.pop_back();
+        }
+        return;
+    }
+};
+class Solution5 {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        intervals.push_back(newInterval);
+        sort(intervals.begin(), intervals.end(), [&](vector<int> a, vector<int> b)
+            {
+                return a[0] < b[0];
+            });
+        vector<vector<int>> ans;
+        int begin = intervals[0][0];
+        int end = intervals[0][1];
+        for (int i = 1; i < intervals.size(); i++)
+        {
+            if (intervals[i][0] <= end && intervals[i][1] > end)
+            {
+                end = intervals[i][1];
+            }
+            else if (intervals[i][0] > end)
+            {
+                ans.push_back({ begin,end });
+                begin = intervals[i][0];
+                end = intervals[i][1];
+            }
+        }
+        ans.push_back({ begin,end });
+        return ans;
+    }
+};
+class MinStack {
+    stack<pair<int, int>> st;
 
+public:
+    MinStack() {
+        st.push({ 0, INT_MAX });
+    }
 
+    void push(int val) {
+        st.push({ val, min(getMin(), val) });
+    }
 
+    void pop() {
+        st.pop();
+    }
+
+    int top() {
+        return st.top().first;
+    }
+
+    int getMin() {
+        return st.top().second;
+    }
+};
 
 
 int main()
