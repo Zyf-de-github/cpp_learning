@@ -1,4 +1,4 @@
-#if 1
+#if 0
 #include <iostream>
 #include <algorithm>
 #include <cmath>
@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
+#include <random>
 using namespace std;
 
 
@@ -207,14 +209,81 @@ public:
         return st.top().second;
     }
 };
+class RandomizedSet {
+public:
+    unordered_set<int> s;
+    RandomizedSet() {
+        s.clear();
+    }
+
+    bool insert(int val) {
+        if (s.find(val) != s.end()) return false;
+        s.insert(val);
+        return true;
+    }
+
+    bool remove(int val) {
+        if (s.find(val) != s.end())
+        {
+            s.erase(val);
+            return true;
+        }
+        return false;
+    }
+
+    int getRandom() {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, s.size() - 1);
+        int offset = dis(gen);
+        auto it = s.begin();
+        std::advance(it, offset);
 
 
+        return *it;
+    }
+};
+class Solution6 {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        vector<int> dp;
+        int sum = 0;
+        int size = 0;
+        while (sum < target && size < nums.size())
+        {
+            sum += nums[size];
+            size++;
+        }
+        if (sum < target && size >= nums.size())return 0;
+        dp.push_back(size);
+        for (int i = 1; i < nums.size(); i++)
+        {
+            int temp_sum = sum - nums[i - 1];
+            int temp_size = size - 1;
+            while (temp_sum < target && temp_size + i < nums.size())
+            {
+                temp_sum += nums[temp_size + i];
+                temp_size++;
+            }
+            if (temp_sum < target && temp_size + i >= nums.size())break;
+            dp.push_back(temp_size);
+            size = temp_size;
+            sum = temp_sum;
+        }
+        int ans = INT_MAX;
+        for (auto it : dp)
+        {
+            ans = min(ans, it);
+        }
+        return ans;
+    }
+};
 int main()
 {
-    Solution2 s;
+    Solution6 s;
     vector<int> v1 = { 1900,1901,1950 };
-    vector<int> v2 = { 1948,1951,2000 };
-    s.maxAliveYear(v1, v2);
+    vector<int> v2 = { 2,3,1,2,4,3 };
+    s.minSubArrayLen(7, v2);
     return 0;
 }
 
