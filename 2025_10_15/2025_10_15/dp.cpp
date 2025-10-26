@@ -174,14 +174,58 @@ public:
         return x > left && x < right && isValidBST(root->left, left, x) && isValidBST(root->right, x, right);
     }
 };
+class Solution8 {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        map<int, vector<int>> m;
+        vector<int> v(numCourses, 0);
+        vector<int> ans;
 
+        //构建课程
+        for (int i = 0; i < numCourses; i++)
+        {
+            m[i] = {};
+        }
+        for (int i = 0; i < prerequisites.size(); i++)
+        {
+            m[prerequisites[i][0]].push_back(prerequisites[i][1]);
+        }
+
+        //构建入度
+        for (int i = 0; i < numCourses; i++)
+        {
+            v[i] = m[i].size();
+        }
+
+        int flag = 0;//是否更改了元素
+        while (ans.size() != numCourses)
+        {
+            if (flag)return{};
+            flag = 1;
+            for (int i = 0; i < numCourses; i++)
+            {
+                if (v[i] == 0)
+                {
+                    ans.push_back(i);
+                    flag = 0;
+                    v[i] = -1;
+                    for (auto it : m)
+                    {
+                        if (find(it.second.begin(), it.second.end(), i) != it.second.end())v[it.first]--;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
 
 
 int main()
 {
-    Solution2 s;
-    vector<int> v = { 1,2,5 };
-    s.coinChange(v, 11);
+    Solution8 s;
+    vector<vector<int>> v = { {1,0},{2,0} , {3,1}, {3,2} };
+    s.findOrder(4, v);
     return 0;
 }
 #endif
