@@ -1,4 +1,4 @@
-#if 1
+#if 0
 
 #include <iostream>
 #include <algorithm>
@@ -15,7 +15,7 @@
 using namespace std;
 
 
- struct TreeNode {
+struct TreeNode {
       int val;
       TreeNode *left;
       TreeNode *right;
@@ -219,13 +219,44 @@ public:
         return ans;
     }
 };
-
+class Solution9 {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int ans = 0;
+        int temp = nums[0];
+        int rptr = 1;
+        int lptr = 0;
+        int n = nums.size();
+        while (rptr <= n && lptr < n)
+        {
+            if (temp < k && rptr < n)
+            {
+                temp += nums[rptr];
+                rptr++;
+            }
+            else if (temp > k)
+            {
+                temp -= nums[lptr];
+                lptr++;
+            }
+            else if (temp == k)
+            {
+                ans++;
+                temp -= nums[lptr];
+                if (lptr < rptr)lptr++;
+                else rptr++;
+            }
+            else rptr++;
+        }
+        return ans;
+    }
+};
 
 int main()
 {
-    Solution8 s;
-    vector<vector<int>> v = { {1,0},{2,0} , {3,1}, {3,2} };
-    s.findOrder(4, v);
+    Solution9 s;
+    vector<int> v = { -1,-1,1 };
+    s.subarraySum(v, 0);
     return 0;
 }
 #endif
