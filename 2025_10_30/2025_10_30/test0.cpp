@@ -33,13 +33,33 @@ public:
         return ans;
     }
 };
+class Solution1 {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<int> s(n);
+        s[0] = nums[0];
+        for (int i = 0; i < n-1; i++)
+        {
+            s[i + 1] = s[i] + nums[i+1];
+        }
 
+        unordered_map<int, int> cnt;
+        int ans = 0;
+        for (int sj : s)
+        {
+            ans += cnt.contains(sj - k) ? cnt[sj - k] : 0;
+            cnt[sj]++;
+        }
+        return ans;
+    }
+};
 
 int main()
 {
-    Solution s;
-    vector<int> x = { 1,3,-1,-3,5,3,6,7 };
-    s.maxSlidingWindow(x, 3);
+    Solution1 s;
+    vector<int> x = { 0,1,2,1,2,1 };
+    s.subarraySum(x, 3);
 	return 0;
 }
 
