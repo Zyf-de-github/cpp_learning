@@ -131,11 +131,38 @@ public:
         return;
     }
 };
+class Solution4 {
+public:
+    int longestValidParentheses(string s) {
+        int lptr = 0, rptr = 0;  //左右指针
+        int a = 0, b = 0;        //左右括号的数量
+        int ans = 0;          //最大匹配数
+        int n = s.size();
+        while (lptr != n || rptr != n)
+        {
+            if (a >= b && rptr < n)
+            {
+                if (a == b)ans = max(ans, a);
+                if (s[rptr] == '(')a++;
+                else if (s[rptr] == ')')b++;
+                rptr++;
+            }
+            else
+            {
+                if (a == b)ans = max(ans, a);
+                if (s[lptr] == '(')a--;
+                else if (s[lptr] == ')')b--;
+                lptr++;
+            }
+        }
+        return ans * 2;
+    }
+};
 int main()
 {
-    Solution1 s;
-    vector<int> x = { 0,1,2,1,2,1 };
-    s.subarraySum(x, 3);
+    Solution4 s;
+
+    s.longestValidParentheses("()(()");
 	return 0;
 }
 
