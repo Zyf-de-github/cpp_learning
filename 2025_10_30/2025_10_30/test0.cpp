@@ -158,6 +158,99 @@ public:
         return ans * 2;
     }
 };
+class Solution5 {
+public:
+    ListNode* sortList(ListNode* head) {
+        ListNode* ans = new ListNode();
+        ListNode* x = ans;
+        int maxnum = INT_MAX, curnum = INT_MIN;
+        while (true)
+        {
+            ListNode* ptr = head;
+            while (ptr)
+            {
+                if (ptr->val > curnum)
+                {
+                    maxnum = min(maxnum, ptr->val);
+                }
+                ptr = ptr->next;
+            }
+            if (maxnum == INT_MAX)break;
+            ListNode* temp = new ListNode(maxnum);
+            x->next = temp;
+            x = x->next;
+            curnum = maxnum;
+            maxnum = INT_MAX;
+        }
+        return ans->next;
+    }
+};
+class Solution6 {
+public:
+    ListNode* sortList(ListNode* head) {
+        vector<int> v;
+        while (head)
+        {
+            v.push_back(head->val);
+            head = head->next;
+        }
+        sort(v.begin(), v.end());
+        ListNode* ans = new ListNode();
+        ListNode* ptr = ans;
+        for (auto it : v)
+        {
+            ListNode* temp = new ListNode(it);
+            ptr->next = temp;
+            ptr = temp;
+        }
+        return ans->next;
+    }
+};
+class Solution7 {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.empty())return nullptr;
+        int n = lists.size();
+        vector<priority_queue<int>> num(n);
+        for (int i = 0; i < n; i++)
+        {
+            ListNode* head = lists[i];
+            while (head)
+            {
+                num[i].push(-head->val);
+                head = head->next;
+            }
+        }
+        for (int i = 0; i < num.size();)
+        {
+            if (num[i].empty())num.erase(num.begin() + i);
+            else i++;
+        }
+        if (num.empty())return nullptr;
+
+        ListNode* ans = new ListNode();
+        ListNode* ptr = ans;
+        while (!num.empty())
+        {
+            int min_num = INT_MIN;
+            int x = 0;
+            for (int i = 0; i < num.size(); i++)
+            {
+                if (min_num < num[i].top())
+                {
+                    x = i;
+                    min_num = num[i].top();
+                }
+            }
+            ListNode* temp = new ListNode(-min_num);
+            num[x].pop();
+            if (num[x].empty())num.erase(num.begin() + x);
+            ptr->next = temp;
+            ptr = temp;
+        }
+        return ans->next;
+    }
+};
 int main()
 {
     Solution4 s;
