@@ -251,11 +251,74 @@ public:
         return ans->next;
     }
 };
+class Solution8 {
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp1(n - 1, 0);
+        dp1[0] = nums[0];
+        vector<int> dp2(n, 0);
+        dp2[1] = nums[1];
+        for (int i = 2; i < n - 1; i++)
+        {
+            dp1[i] = max(dp1[i - 1], dp1[i - 2] + nums[i]);
+        }
+        for (int i = 2; i < n; i++)
+        {
+            dp2[i] = max(dp2[i - 1], dp2[i - 2] + nums[i]);
+        }
+        return max(dp2[n - 1], dp1[n - 2]);
+    }
+};
+class Solution9 {
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        set<int> lines;
+        for (auto x : buildings)
+        {
+            lines.insert(x[0]);
+            lines.insert(x[1]);
+        }
+        sort(buildings.begin(), buildings.end(), [&](vector<int> a, vector<int> b)
+            {
+                return a[0] < b[0];
+            });
+        int i = 0, n = buildings.size();
+        vector<vector<int>> ans;
+        int height_temp = 0, line_temp = 0;
+        priority_queue<pair<int, int>> q;//<height,i>
+        for (int line : lines)
+        {
+            while (!q.empty() && line >= buildings[q.top().second][1])q.pop();
+
+            for (; i < n && line >= buildings[i][0] && line < buildings[i][1]; i++)
+            {
+                q.push({ buildings[i][2],i });
+            }
+
+            if (!q.empty() && height_temp != q.top().first)
+            {
+                ans.push_back({ line_temp,height_temp });
+                height_temp = q.top().first;
+                line_temp = line;
+            }
+            else if (q.empty())
+            {
+                ans.push_back({ line_temp,height_temp });
+                height_temp = 0;
+                line_temp = line;
+            }
+        }
+        ans.push_back({ height_temp,line_temp });
+        ans.erase(ans.begin());
+        return ans;
+    }
+};
 int main()
 {
-    Solution4 s;
-
-    s.longestValidParentheses("()(()");
+    Solution9 s;
+    vector<vector<int>> a = { {1,2,1} ,{1,2,2},{1,2,3}};
+    s.getSkyline(a);
 	return 0;
 }
 
