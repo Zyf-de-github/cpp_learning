@@ -314,12 +314,71 @@ public:
         return ans;
     }
 };
+class Solution10 {
+public:
+    int countMajoritySubarrays(vector<int>& nums, int target) {
+        int n = nums.size();
+        vector<int> pair(n + 1, 0);
+        for (int i = 0; i < n; i++)
+        {
+            if (nums[i] == target)pair[i + 1] = pair[i] + 1;
+            if (nums[i] != target)pair[i + 1] = pair[i] - 1;
+        }
+        int ans = 0;
+        for (int i = 0; i <= n; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (pair[i] - pair[j] > 0)ans++;
+            }
+        }
+        return ans;
+    }
+};
+class Solution11 {
+public:
+    int longestSubarray(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 1)return 1;
+        int ptr = 0;
+        int ans = 0;
+        int temp_ans = 1;
+        int i = 0;
+        while (i < n)
+        {
+            int flag = 1;
+            while (i < n - 1 && nums[i] <= nums[i + 1])
+            {
+                i++;
+                temp_ans++;
+            }
+            ptr = i + 1;
+            if (i < n - 1)
+            {
+                flag = 0;
+                int recoder = nums[i + 1];
+                nums[i + 1] = nums[i];
+                while (i < n - 1 && nums[i] <= nums[i + 1])
+                {
+                    i++;
+                    temp_ans++;
+                }
+                nums[ptr] = recoder;
+            }
+            if (flag && temp_ans < n)ans = max(temp_ans + 1, ans);
+            else ans = max(temp_ans, ans);
+            i = ptr;
+            temp_ans = 1;
+        }
+        return ans;//-1 0 -4 -3
+    }
+}; //ÓÐbug£¬ÔÚµ÷ÊÔ
 
 int main()
 {
-    Solution9 s;
-    vector<vector<int>> a = { {1,2,1} ,{1,2,2},{1,2,3}};
-    s.getSkyline(a);
+    Solution11 s;
+    vector<int> a = { 6,-2,1,0,0};
+    s.longestSubarray(a);
 	return 0;
 }
 
