@@ -372,13 +372,30 @@ public:
         }
         return ans;//-1 0 -4 -3
     }
-}; //ÓÐbug£¬ÔÚµ÷ÊÔ
-
+};
+class Solution12 {
+public:
+    int maxOperations(string s) {
+        int ans = 0;
+        int n = s.size();
+        int num_1 = 0;
+        for (int i = n - 1; i >= 0; i--)
+        {
+            if (s[i] == '1')
+            {
+                ans += (n - num_1) - (i + 1);
+                num_1++;
+            }
+        }
+        return ans;
+    }
+};
+ 
 int main()
 {
-    Solution11 s;
+    Solution12 s;
     vector<int> a = { 6,-2,1,0,0};
-    s.longestSubarray(a);
+    s.maxOperations("1001101");
 	return 0;
 }
 
