@@ -390,12 +390,102 @@ public:
         return ans;
     }
 };
- 
+class Solution13 {
+public:
+    vector<vector<int>> memo;
+    bool canPartition(vector<int>& nums) {
+        int s = 0, n = nums.size();
+        for (auto it : nums)s += it;
+        if (s % 2)return false;
+        s = s / 2;
+        memo.assign(n, vector<int>(s + 1, -1));
+        int ans = dfs(nums, n - 1, s);
+        return ans == -1 ? false : true;
+    }
+    int dfs(vector<int>& nums, int ptr, int top)
+    {
+        if (ptr < 0)return top == -1 ? 1 : -1;
+        if (memo[ptr][top] != -1)return memo[ptr][top];
+        if (top < nums[ptr])return dfs(nums, ptr - 1, top);
+        memo[ptr][top] = dfs(nums, ptr - 1, top) + dfs(nums, ptr - 1, top - nums[ptr]);
+        return memo[ptr][top];
+    }
+};
+class LRUCache {
+public:
+    unordered_map<int, int> m;
+    vector<int> v;
+    int max_num;
+    LRUCache(int capacity) {
+        m.clear();
+        v.clear();
+        max_num = capacity;
+    }
+
+    int get(int key) {
+        if (m.count(key))
+        {
+            int temp = 0;
+            for (int i = 0; i < v.size(); i++)
+            {
+                if (v[i] == key)
+                {
+                    temp = i;
+                    break;
+                }
+            }
+            v.erase(v.begin() + temp);
+            v.push_back(key);
+            return m[key];
+        }
+        return -1;
+    }
+
+    void put(int key, int value) {
+        if (m.count(key))
+        {
+            m[key] = value;
+            int temp = 0;
+            for (int i = 0; i < v.size(); i++)
+            {
+                if (v[i] == key)
+                {
+                    temp = i;
+                    break;
+                }
+            }
+            v.erase(v.begin() + temp);
+            v.push_back(key);
+        }
+        else
+        {
+            if (v.size() < max_num)
+            {
+                m[key] = value;
+                v.push_back(key);
+            }
+            else
+            {
+                m.erase(v[0]);
+                m[key] = value;
+                v.erase(v.begin());
+                v.push_back(key);
+            }
+        }
+    }
+};
 int main()
 {
-    Solution12 s;
-    vector<int> a = { 6,-2,1,0,0};
-    s.maxOperations("1001101");
+    LRUCache s(2);
+    s.put(1, 1);
+    s.put(2, 2);
+    s.get(1);
+    s.put(3, 3);
+    s.get(2);
+    s.put(4, 4);
+    s.get(1);
+    s.get(3);
+    s.get(4);
 	return 0;
 }
 
