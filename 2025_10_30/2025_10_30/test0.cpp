@@ -1,4 +1,4 @@
-#if 1
+#if 0
 
 #include <iostream>
 #include <algorithm>
@@ -474,6 +474,7 @@ public:
         }
     }
 };
+
 int main()
 {
     LRUCache s(2);
