@@ -232,7 +232,7 @@ public:
         return length;
     }
 }; 
-class Solution {
+class Solution9 {
 public:
     vector<int> sumAndMultiply(string s, vector<vector<int>>& queries)
     {
@@ -260,6 +260,51 @@ public:
         return ans;
     }
 }; 
+class Solution10 {
+public:
+    int lastStoneWeight(vector<int>& stones) {
+        priority_queue<int> pq;
+        for (int i = 0; i < stones.size(); i++)
+        {
+            pq.push(stones[i]);
+        }
+        while (pq.size() >= 2)
+        {
+            int a = pq.top();
+            pq.pop();
+            int b = pq.top();
+            pq.pop();
+            pq.push(abs(a - b));
+        }
+        return pq.top();
+    }
+};
+class Solution11 {
+public:
+    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        priority_queue<tuple<int, int, int>> pq;
+        int m = nums1.size(), n = nums2.size();
+        for (int i = 0; i < m; i++)
+        {
+            pq.push({ -nums1[i] - nums2[0],-i,0 });
+        }
+
+        vector<vector<int>> ans;
+        while (k--)
+        {
+            int i = -get<1>(pq.top());
+            int j = -get<2>(pq.top());
+            ans.push_back({ nums1[i],nums2[j] });
+            pq.pop();
+            if (j + 1 < n)
+            {
+                pq.push({ -nums1[i] - nums2[j + 1],-i,-j - 1 });
+            }
+        }
+        return ans;
+    }
+};
+
 int main()
 {
     Solution8 s;
