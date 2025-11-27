@@ -304,13 +304,83 @@ public:
         return ans;
     }
 };
+class Solution12 {
+public:
+    string maskPII(string s) {
+        int case_state = 0;
+        string ans;
+        int n = s.size();
+        for (int i = 0; i < n; i++)if (s[i] == '@')case_state = 1;
+        if (case_state)
+        {
+            int i = 0;
+            if (s[0] >= 'A' && s[0] <= 'Z')ans.push_back(s[0] - 'A' + 'a');
+            else ans.push_back(s[0]);
+            for (int i = 0; i < 5; i++)ans.push_back('*');
+            while (i++ < n)
+            {
+                if (s[i] == '@')
+                {
+                    if (s[i - 1] >= 'A' && s[i - 1] <= 'Z')ans.push_back(s[i - 1] - 'A' + 'a');
+                    else ans.push_back(s[i - 1]);
+                    ans.push_back(s[i]);
+                    break;
+                }
+            }
+            while (i++ < n)
+            {
+                if (s[i] >= 'A' && s[i] <= 'Z')ans.push_back(s[i] - 'A' + 'a');
+                else ans.push_back(s[i]);
+            }
+        }
+        else
+        {
+            int j = n - 1;
+            int times = 0;
+            while (j-- && j >= 0 && times < 4)
+            {
+                if (s[j] >= '0' && s[j] <= '9')
+                {
+                    s.push_back(s[j]);
+                    times++;
+                }
+            }
+            s.push_back('-');
+            while (j-- && j >= 0 && times < 3)
+            {
+                if (s[j] >= '0' && s[j] <= '9')
+                {
+                    s.push_back('*');
+                    times++;
+                }
+            }
+            s.push_back('-');
+            while (j-- && j >= 0 && times < 3)
+            {
+                if (s[j] >= '0' && s[j] <= '9')
+                {
+                    s.push_back('*');
+                    times++;
+                }
+            }
+            while (j-- && j >= 0)
+            {
+                if (s[j] >= '0' && s[j] <= '9')
+                {
+                    s.push_back(s[j]);
+                }
+            }
+        }
+        return ans;
+    }
+};
 
 int main()
 {
-    Solution8 s;
+    Solution12 s;
     vector<int>  nums = { 0 };
     vector<vector<int>>  queries = { {0,1},{1,2},{0,2} };
-    cout<<s.maxBalancedSubarray(nums);
+    cout << s.maskPII("LeetCode@LeetCode.com");
 	return 0;
 }
 
