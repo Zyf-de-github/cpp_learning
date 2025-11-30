@@ -374,13 +374,80 @@ public:
         return ans;
     }
 };
-
+class Solution13 {
+public:
+    int countElements(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        int ans = 0, n = nums.size();
+        int temp = 1;
+        for (int i = 0; i < n-1; i++)
+        {
+            if (nums[i] != nums[i + 1] && n - i - 1 >= k)
+            {
+                ans += temp;
+                temp = 1;
+            }
+            else if (nums[i] == nums[i + 1])temp++;
+        }
+        return k > 0 ? ans : ans + temp;
+    }
+};
+class Solution14 {
+public:
+    int minMirrorPairDistance(vector<int>& nums) {
+        unordered_map<int, int> m;
+        int ans = INT_MAX;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            string s = to_string(nums[i]);
+            int x = stoi(s);
+            if (m.count(x))
+            {
+                ans = min(ans, i - m[x]);
+            }
+            reverse(s.begin(), s.end());
+            x = stoi(s);
+            m[x] = i;
+        }
+        //m.clear();
+        //for (int i = nums.size()-1; i >=0;i--)
+        //{
+        //    string s = to_string(nums[i]);
+        //    int x = stoi(s);
+        //    if (m.count(x))
+        //    {
+        //        ans = min(ans, m[x]-i);
+        //    }
+        //    reverse(s.begin(), s.end());
+        //    x = stoi(s);
+        //    m[x] = i;
+        //}
+        return ans==INT_MAX?-1:ans;
+    }
+};
+class Solution15 {
+    public:
+        int maxDistinct(string s) {
+            int ans = 0;
+            vector<bool> v(26, false);
+            for (int i = 0; i < s.size(); i++)
+            {
+                if (!v[s[i] - 'a'])
+                {
+                    v[s[i] - 'a'] = true;
+                    ans++;
+                }
+            }
+            return ans;
+        }
+};
 int main()
 {
-    Solution12 s;
-    vector<int>  nums = { 0 };
+    Solution15 s;
+    vector<int>  nums = { 11,22,45,33,55,21,120  };
+    int k = 0;
     vector<vector<int>>  queries = { {0,1},{1,2},{0,2} };
-    cout << s.maskPII("LeetCode@LeetCode.com");
+    cout << s.maxDistinct("aaaa");
 	return 0;
 }
 
