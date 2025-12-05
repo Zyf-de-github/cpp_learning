@@ -374,6 +374,7 @@ public:
         return ans;
     }
 };
+
 class Solution13 {
 public:
     int countElements(vector<int>& nums, int k) {
@@ -441,13 +442,59 @@ class Solution15 {
             return ans;
         }
 };
+
+class Solution16 {
+public:
+    int minSubarray(vector<int>& nums, int p) {
+        int n = nums.size();
+        vector<int> per(n + 1, 0);
+        unordered_map<int, int>m;
+        int ans = INT_MAX;
+        int flag = 0;//判断数组是否全为空才成立
+        for (int i = 0; i < n; i++)per[i + 1] = (nums[i] + per[i]) % p;
+        if (per[n] % p == 0)return 0;
+        for (int i = 0; i <= n; i++)
+        {
+            if (i != 0 && per[i] % p == 0)
+            {
+                flag = 1;
+                m.clear();
+                m[per[i] % p] = i;
+                continue;
+            }
+            int temp = (per[i] - per[n] + p) % p;
+            if (i == n && !flag)continue;
+            if (m.count(temp))
+            {
+                ans = min(ans, i - m[temp]);
+            }
+            m[per[i] % p] = i;
+        }
+        return ans == INT_MAX ? -1 : ans;
+    }
+};
+class Solution17 {
+public:
+    int peakIndexInMountainArray(vector<int>& arr) {
+        //1 2 3 4 5 4 3 2 1
+        int n = arr.size(), lptr = 0, rptr = n - 2;
+        while (lptr < rptr)
+        {
+            int mid = (lptr + rptr) / 2;
+            if (arr[mid] < arr[mid + 1])lptr = mid + 1;
+            else rptr = mid - 1;
+        }
+        return rptr;
+    }
+};
+
 int main()
 {
-    Solution15 s;
-    vector<int>  nums = { 11,22,45,33,55,21,120  };
+    Solution17 s;
+    vector<int>  nums = { 1,2,1};
     int k = 0;
     vector<vector<int>>  queries = { {0,1},{1,2},{0,2} };
-    cout << s.maxDistinct("aaaa");
+    cout << s.peakIndexInMountainArray(nums);
 	return 0;
 }
 
