@@ -488,13 +488,123 @@ public:
     }
 };
 
+class Solution20 {
+public:
+    bool completePrime(int num) {
+        string s = to_string(num);
+        int n = s.size();
+        int pre = 0, last = 0;
+        for (int i = 0; i < n; i++)
+        {
+            pre = stoi(s.substr(0, i + 1));
+            last = stoi(s.substr(n - 1 - i, n - 1 + 1));
+            if ((!is_num(pre)) || (!is_num(last)))return false;
+        }
+        return true;
+    }
+    bool is_num(int x)
+    {
+
+        if (x == 2)return true;
+        if (x < 2 || x % 2 == 0)return false;
+        int temp = pow(x, 0.5);
+        for (int i = 3; i <= temp + 1; i += 2)
+        {
+            if (!(x % i))return false;
+        }
+        return true;
+    }
+}; 
+class Solution21 {
+public:
+    vector<int> minOperations(vector<int>& nums) {
+        vector<int>back;
+        for (int i = 0; i < 5200; i++)
+        {
+            string s;
+            int temp = i;
+            do
+            {
+                s.push_back((temp & 1) + '0');
+                temp >>= 1;
+            } while (temp);
+            int n = s.size();
+            for (int j = n / 2; j >= 0; j--)
+            {
+                if (s[j] != s[n - 1 - j])break;
+                else if(j==0) back.push_back(i);
+            }
+        }
+        vector<int>ans(5001, 0);
+        int before = back[0];
+        int after = back[1];
+        int ptr = 2;
+        int n = back.size();
+        for (int i = 0; i <= 5000; i++)
+        {
+            while (i > after && ptr < n)
+            {
+                before = after;
+                after = back[ptr];
+                ptr++;
+            }
+            ans[i] = min(i - before, after - i);
+        }
+        vector<int>x;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            x.push_back(ans[nums[i]]);
+        }
+        return x;
+    }
+};
+
+class Solution22 {
+public:
+    long long maxPoints(vector<int>& technique1, vector<int>& technique2, int k) {
+        int n = technique1.size();
+        vector<int>v(n, 0);
+        for (int i = 0; i < n; i++)
+        {
+            if (technique1[i] > technique2[i])
+            {
+                k--;
+                v[i] = 1;
+            }
+        }
+        if (k > 0)
+        {
+            priority_queue<pair<int, int>>q;
+            for (int i = 0; i < n; i++)
+            {
+                if (v[i])continue;
+                q.push({ technique2[i] - technique1[i],i});
+                if (q.size() > k)q.pop();
+            }
+            while (!q.empty())
+            {
+                v[q.top().second] = 1;
+                q.pop();
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (v[i])ans += technique1[i];
+            else ans += max(technique1[i], technique2[i]);
+        }
+        return ans;
+    }
+}; 
 int main()
 {
-    Solution17 s;
-    vector<int>  nums = { 1,2,1};
+    Solution22 s;
+    vector<int>  nums1 = { 1,2,3};
+    vector<int>  nums2 = { 4,5,6};
     int k = 0;
     vector<vector<int>>  queries = { {0,1},{1,2},{0,2} };
-    cout << s.peakIndexInMountainArray(nums);
+    //cout << s.minOperations(nums);
+    cout << s.maxPoints(nums1, nums2,0);
 	return 0;
 }
 
