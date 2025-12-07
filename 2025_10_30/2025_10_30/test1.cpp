@@ -558,7 +558,6 @@ public:
         return x;
     }
 };
-
 class Solution22 {
 public:
     long long maxPoints(vector<int>& technique1, vector<int>& technique2, int k) {
@@ -595,16 +594,98 @@ public:
         }
         return ans;
     }
+};
+
+
+class Solution23 {
+public:
+    vector<int> sortByReflection(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(n, 0);
+        priority_queue<pair<int, int>>q;
+        for (int i = 0; i < n; i++)
+        {
+            q.push({ to_2(nums[i]),nums[i] });
+        }
+        for (int i = n - 1; i >= 0; i--)
+        {
+            ans[i] = q.top().second;
+            q.pop();
+        }
+        return ans;
+    }
+    int to_2(int x)
+    {
+        string s;
+        do
+        {
+            s.push_back((x & 1) + '0');
+            x >>= 1;
+        } while (x);
+        int ans = 0,n=s.size();
+        for (int i = 0; i < n; i++)
+        {
+            if(s[i]=='1')ans += pow(2, n - 1 - i);
+        }
+        return ans;
+    }
 }; 
+class Solution24 {
+public:
+    int largestPrime(int n) {
+        vector<int>sub;
+        sub.push_back(0);
+        for (int i = 1; i <= n&& sub[sub.size() - 1] <= n; i++)
+        {
+            if (judge(i))
+            {
+                sub.push_back(sub[sub.size() - 1] + i);
+            }
+        }
+        int ans = 0;
+        for (int i = 0; i < sub.size() && sub[i] <= n; i++)
+        {
+            if (judge(sub[i]))ans = max(ans, sub[i]);
+        }
+        return ans;
+    }
+    bool judge(int x)
+    {
+        if (x == 2)return true;
+        if (x < 2 || !(x % 2))return false;
+        int temp = pow(x, 0.5) + 1;
+        for (int i = 3; i < temp; i += 2)
+        {
+            if (!(x % i))return false;
+        }
+        return true;
+    }
+}; 
+class Solution25 {
+public:
+    int countPartitions(vector<int>& nums) {
+        int n = nums.size();
+        int left = 0, right = 0;
+        for (int i = 0; i < nums.size(); i++)right += nums[i];
+        int ans = 0;
+        for (int i = 0; i < nums.size() - 1; i++)
+        {
+            left += nums[i];
+            right -= nums[i];
+            if (!(abs(left - right) % 2))ans++;
+        }
+        return ans;
+    }
+};
 int main()
 {
-    Solution22 s;
-    vector<int>  nums1 = { 1,2,3};
+    Solution25 s;
+    vector<int>  nums1 = { 10,10,3,7,6 };
     vector<int>  nums2 = { 4,5,6};
     int k = 0;
     vector<vector<int>>  queries = { {0,1},{1,2},{0,2} };
     //cout << s.minOperations(nums);
-    cout << s.maxPoints(nums1, nums2,0);
+    cout << s.countPartitions(nums1);
 	return 0;
 }
 
