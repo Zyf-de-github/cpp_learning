@@ -44,6 +44,10 @@ Makefile
 *.log
 *.vs/
 
+# CLion 构建目录
+cmake-build-*/
+.idea/
+
 # 保留源代码和头文件
 !*.cpp
 !*.c
