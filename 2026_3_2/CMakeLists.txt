@@ -6,4 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(2026_3_2 main.cpp
         leetcode.cpp
         leetcode_3_3.cpp
+        leetcode_3_4.cpp
+        lanqiao_3_5.cpp
 )
