@@ -103,6 +103,15 @@
 using namespace std;
 int dev_num=1000000007;
 
+int opp(int b)
+{
+    if(b==1)return 4;
+    else if(b==2)return 5;
+    else if(b==3)return 6;
+    else if(b==4)return 1;
+    else if(b==5)return 2;
+    else if(b==6)return 3;//映射到朝下
+}
 
 int main()
 {
@@ -113,14 +122,8 @@ int main()
     {
         int a,b;
         cin>>a>>b;
-        if(b==1)b=4;
-        else if(b==2)b=5;
-        else if(b==3)b=6;
-        else if(b==4)b=1;
-        else if(b==5)b=2;
-        else if(b==6)b=3;//映射到朝下
-        m[a].push_back(b);
-        m[b].push_back(a);
+        m[a].push_back(opp(b));
+        m[b].push_back(opp(a));
     }
     vector<vector<int>> dp(num,vector<int>(6));
     for(int i=0;i<num;i++)
