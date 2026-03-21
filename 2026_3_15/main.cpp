@@ -76,62 +76,63 @@
 //         }
 //         else v[i]=min_num++;
 //     }
+
 //     for (auto i:v)cout<<i<<" ";
 //     return 0;
 // }
 
 
 
-#include <bits/stdc++.h>
-using namespace std;
-#define M 1000000007
-
-pair<int,int> fenshu_add(pair<int,int> a,pair<int,int> b)
-{
-    int down=a.second*b.second;
-    int up=a.first*b.second+a.second*b.first;
-    for (int i=up;i>1;i--)
-    {
-        if (down%i==0&&up%i==0)
-        {
-            down/=i;
-            up/=i;
-        }
-    }
-    return {up,down};
-}
-pair<int,int> fenshu_mul(pair<int,int> a,pair<int,int> b)
-{
-    int down=a.second*b.second;
-    int up=a.first*b.first;
-    for (int i=up;i>1;i--)
-    {
-        if (down%i==0&&up%i==0)
-        {
-            down/=i;
-            up/=i;
-        }
-    }
-    return {up,down};
-}
-int main()
-{
-    int n;
-    cin>>n;
-    vector<pair<int,int>> a(n+1,{0,1});
-    a[0]={1,1};
-    for(int i=0;i<n;i++)
-    {
-        int u,v;
-        cin>>u>>v;
-        a[i+1]=fenshu_mul(a[i],{u,v});
-    }
-    long long temp=a[n].second;
-    for (int i=0;i<M;i++)
-    {
-        temp*=temp;
-        temp%=M;
-    }
-    cout<<a[n].first*temp%M;
-    return 0;
-}
+// #include <bits/stdc++.h>
+// using namespace std;
+// #define M 1000000007
+//
+// pair<int,int> fenshu_add(pair<int,int> a,pair<int,int> b)
+// {
+//     int down=a.second*b.second;
+//     int up=a.first*b.second+a.second*b.first;
+//     for (int i=up;i>1;i--)
+//     {
+//         if (down%i==0&&up%i==0)
+//         {
+//             down/=i;
+//             up/=i;
+//         }
+//     }
+//     return {up,down};
+// }
+// pair<int,int> fenshu_mul(pair<int,int> a,pair<int,int> b)
+// {
+//     int down=a.second*b.second;
+//     int up=a.first*b.first;
+//     for (int i=up;i>1;i--)
+//     {
+//         if (down%i==0&&up%i==0)
+//         {
+//             down/=i;
+//             up/=i;
+//         }
+//     }
+//     return {up,down};
+// }
+// int main()
+// {
+//     int n;
+//     cin>>n;
+//     vector<pair<int,int>> a(n+1,{0,1});
+//     a[0]={1,1};
+//     for(int i=0;i<n;i++)
+//     {
+//         int u,v;
+//         cin>>u>>v;
+//         a[i+1]=fenshu_mul(a[i],{u,v});
+//     }
+//     long long temp=a[n].second;
+//     for (int i=0;i<M;i++)
+//     {
+//         temp*=temp;
+//         temp%=M;
+//     }
+//     cout<<a[n].first*temp%M;
+//     return 0;
+// }
