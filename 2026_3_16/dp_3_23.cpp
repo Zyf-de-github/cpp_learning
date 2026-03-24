@@ -90,7 +90,7 @@ public:
         return num_max;
     }
 };
-class Solution {
+class Solution4 {
 public:
     int maxSubarraySumCircular(vector<int>& nums) {
         int nums_size=nums.size();
@@ -106,11 +106,75 @@ public:
         return max_nums<0?max_nums:max(total-min_ans,max_ans);
     }
 };
+class Solution5 {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum=0;
+        for (auto it:nums)sum+=it;
+        if (sum%2)return false;
+        sum/=2;
+        vector<vector<bool>> memo(nums.size()+1,vector<bool>(sum+1,false));
+        memo[0][0]=true;
+        for (int i=0;i<nums.size();i++)
+        {
+            for (int j=0;j<=sum;j++)
+            {
+                memo[i+1][j]=(j-nums[i]>=0)&&memo[i][j-nums[i]]||memo[i][j];
+            }
+        }
+        return memo[nums.size()][sum];
+    }
+};
+class Solution6 {
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int sum=0;
+        for (auto it:nums)sum+=it;
+        sum+=target;
+        if (sum<0)sum=sum-target-target;
+        if (sum%2)return 0;
+        sum/=2;
+        vector<vector<int>> memo(nums.size()+1,vector<int>(sum+1,0));
+        memo[0][0]=1;
+        for (int i=0;i<nums.size();i++)
+        {
+            for (int j=0;j<=sum;j++)
+            {
+                if (j-nums[i]>=0)memo[i+1][j]+=memo[i][j-nums[i]];
+                memo[i+1][j]+=memo[i][j];
+            }
+        }
+        return memo[nums.size()][sum];
+    }
+
+};
+class Solution {
+public:
+    int lengthOfLongestSubsequence(vector<int>& nums, int target) {
+        vector<vector<pair<bool,int>>> memo(nums.size()+1,vector<pair<bool,int>>(target+1,{false,0}));
+        memo[0][0]={true,0};
+        for (int i=0;i<nums.size();i++)
+        {
+            for (int j=0;j<=target;j++)
+            {
+                memo[i+1][j].first=(j-nums[i]>=0)&&memo[i][j-nums[i]].first||memo[i][j].first;
+                if (j-nums[i]<0&&memo[i][j].first)memo[i+1][j].second=memo[i][j].second;
+                else if (j-nums[i]>=0)
+                {
+                    if (memo[i][j-nums[i]].first&&memo[i][j].first)memo[i+1][j].second=max(memo[i][j].second,memo[i][j-nums[i]].second+1);
+                    else if (!memo[i][j-nums[i]].first&&memo[i][j].first)memo[i+1][j].second=memo[i][j].second;
+                    else if (memo[i][j-nums[i]].first&&!memo[i][j].first)memo[i+1][j].second=memo[i][j-nums[i]].second+1;
+                }
+            }
+        }
+        return memo[nums.size()][target].first==true?memo[nums.size()][target].second:-1;
+    }
+};
 
 int main() {
     Solution s;
-    vector<int> v={5,-2,5};
-    s.maxSubarraySumCircular(v);
+    vector<int> v={1,1,5,4,5};
+    s.lengthOfLongestSubsequence(v,3);
 
     return 0;
 }
