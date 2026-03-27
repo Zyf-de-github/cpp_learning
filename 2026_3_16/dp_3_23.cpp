@@ -281,12 +281,230 @@ public:
         return dp[m-1][n-1]-waitCost[m-1][n-1];
     }
 };
+//错误
+class Solution3 {
+public:
+    int maximumAmount(vector<vector<int>>& coins) {
+        int m=coins.size(),n=coins[0].size();
+        vector dp(m,vector<tuple<int,int,int>>(n,{0,0,0}));
+        for (int i=0;i<m;i++) {
+            for (int j=0;j<n;j++) {
+                if (i==0&&j==0)coins[0][0]>0?get<0>(dp[0][0])=coins[0][0]:get<1>(dp[0][0])=-coins[0][0];
+                else if (i==0&&j!=0) {
+                    if (coins[i][j]>=0) {
+                        get<0>(dp[i][j])=get<0>(dp[i][j-1])+coins[i][j];
+                        get<1>(dp[i][j])=get<1>(dp[i][j-1]);
+                        get<2>(dp[i][j])=get<2>(dp[i][j-1]);
+                    }
+                    else {
+                        if (!(get<1>(dp[i][j-1])>=-coins[i][j]&&get<2>(dp[i][j-1])>=-coins[i][j])) {
+                            get<0>(dp[i][j])=get<0>(dp[i][j-1]);
+                            int a=get<1>(dp[i][j-1]);
+                            int b=get<2>(dp[i][j-1]);
+                            get<0>(dp[i][j])-=min(a,b);
+                            a>b?b=-coins[i][j]:a=-coins[i][j];
+                            get<1>(dp[i][j])=a;
+                            get<2>(dp[i][j])=b;
+                        }
+                        else {
+                            get<0>(dp[i][j])=get<0>(dp[i][j-1])+coins[i][j];
+                            get<1>(dp[i][j])=get<1>(dp[i][j-1]);
+                            get<2>(dp[i][j])=get<2>(dp[i][j-1]);
+                        }
+                    }
+                }
+                else if (i!=0&&j==0) {
+                    if (coins[i][j]>=0) {
+                        get<0>(dp[i][j])=get<0>(dp[i-1][j])+coins[i][j];
+                        get<1>(dp[i][j])=get<1>(dp[i-1][j]);
+                        get<2>(dp[i][j])=get<2>(dp[i-1][j]);
+                    }
+                    else {
+                        if (!(get<1>(dp[i-1][j])>=-coins[i][j]&&get<2>(dp[i-1][j])>=-coins[i][j])) {
+                            get<0>(dp[i][j])=get<0>(dp[i-1][j]);
+                            int a=get<1>(dp[i-1][j]);
+                            int b=get<2>(dp[i-1][j]);
+                            get<0>(dp[i][j])-=min(a,b);
+                            a>b?b=-coins[i][j]:a=-coins[i][j];
+                            get<1>(dp[i][j])=a;
+                            get<2>(dp[i][j])=b;
+                        }
+                        else {
+                            get<0>(dp[i][j])=get<0>(dp[i-1][j])+coins[i][j];
+                            get<1>(dp[i][j])=get<1>(dp[i-1][j]);
+                            get<2>(dp[i][j])=get<2>(dp[i-1][j]);
+                        }
+                    }
+                }
+                else if (i!=0&&j!=0) {
+                    if (coins[i][j]>=0) {
+                        if (dp[i-1][j]>dp[i][j-1]) {
+                            get<0>(dp[i][j])=get<0>(dp[i-1][j])+coins[i][j];
+                            get<1>(dp[i][j])=get<1>(dp[i-1][j]);
+                            get<2>(dp[i][j])=get<2>(dp[i-1][j]);
+                        }
+                        else {
+                            get<0>(dp[i][j])=get<0>(dp[i][j-1])+coins[i][j];
+                            get<1>(dp[i][j])=get<1>(dp[i][j-1]);
+                            get<2>(dp[i][j])=get<2>(dp[i][j-1]);
+                        }
+                    }
+                    else {
+                        if (dp[i-1][j]>dp[i][j-1]) {
+                            if (!(get<1>(dp[i-1][j])>=-coins[i][j]&&get<2>(dp[i-1][j])>=-coins[i][j])) {
+                                get<0>(dp[i][j])=get<0>(dp[i-1][j]);
+                                int a=get<1>(dp[i-1][j]);
+                                int b=get<2>(dp[i-1][j]);
+                                get<0>(dp[i][j])-=min(a,b);
+                                a>b?b=-coins[i][j]:a=-coins[i][j];
+                                get<1>(dp[i][j])=a;
+                                get<2>(dp[i][j])=b;
+                            }
+                            else {
+                                get<0>(dp[i][j])=get<0>(dp[i-1][j])+coins[i][j];
+                                get<1>(dp[i][j])=get<1>(dp[i-1][j]);
+                                get<2>(dp[i][j])=get<2>(dp[i-1][j]);
+                            }
+                        }
+                        else {
+                            if (!(get<1>(dp[i][j-1])>=-coins[i][j]&&get<2>(dp[i][j-1])>=-coins[i][j])) {
+                                get<0>(dp[i][j])=get<0>(dp[i][j-1]);
+                                int a=get<1>(dp[i][j-1]);
+                                int b=get<2>(dp[i][j-1]);
+                                get<0>(dp[i][j])-=min(a,b);
+                                a>b?b=-coins[i][j]:a=-coins[i][j];
+                                get<1>(dp[i][j])=a;
+                                get<2>(dp[i][j])=b;
+                            }
+                            else {
+                                get<0>(dp[i][j])=get<0>(dp[i][j-1])+coins[i][j];
+                                get<1>(dp[i][j])=get<1>(dp[i][j-1]);
+                                get<2>(dp[i][j])=get<2>(dp[i][j-1]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return get<0>(dp[m-1][n-1]);
+    }
+};
+//正确
+class Solution4 {
+public:
+    int maximumAmount(vector<vector<int>>& coins) {
+        int m = coins.size(), n = coins[0].size();
+        // 因为可能有非常小的负数，初始值设为一个极小值
+        const int INF = 1e9;
+        // dp[i][j][k] 表示到 (i,j) 且使用了 k 次消除技能的最大收益
+        vector<vector<vector<int>>> dp(m, vector<vector<int>>(n, vector<int>(3, -INF)));
+
+        // 初始化起点
+        dp[0][0][0] = coins[0][0];
+        if (coins[0][0] < 0) {
+            dp[0][0][1] = 0; // 起点如果是负数，可以选择用掉一次免疫
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (dp[i][j][k] == -INF) continue; // 无效状态跳过
+
+                    // 向右走
+                    if (j + 1 < n) {
+                        // 不使用免疫技能（或者遇到正数）
+                        dp[i][j+1][k] = max(dp[i][j+1][k], dp[i][j][k] + coins[i][j+1]);
+                        // 如果是负数，且技能还没用完(k+1 <= 2)，尝试使用免疫技能
+                        if (coins[i][j+1] < 0 && k + 1 < 3) {
+                            dp[i][j+1][k+1] = max(dp[i][j+1][k+1], dp[i][j][k]);
+                        }
+                    }
+
+                    // 向下走
+                    if (i + 1 < m) {
+                        // 不使用免疫技能
+                        dp[i+1][j][k] = max(dp[i+1][j][k], dp[i][j][k] + coins[i+1][j]);
+                        // 如果是负数，且技能还没用完，尝试使用免疫技能
+                        if (coins[i+1][j] < 0 && k + 1 < 3) {
+                            dp[i+1][j][k+1] = max(dp[i+1][j][k+1], dp[i][j][k]);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 最终结果是到达终点时，使用 0次、1次 或 2次 免疫情况下的最大值
+        return max({dp[m-1][n-1][0], dp[m-1][n-1][1], dp[m-1][n-1][2]});
+    }
+};
+
+class Solution5 {
+public:
+    int change(int amount, vector<int> coins) {
+        vector v(coins.size(),vector<unsigned long long>(amount+1,0));
+        sort(coins.begin(), coins.end());
+        for (int i=0;i<coins.size();i++) {
+            for (int j=0;j<=amount;j++) {
+                if (j==0)v[i][j]=1;
+                else if (i==0) j-coins[i]>=0?v[i][j]+=v[i][j-coins[i]]:0;
+                else {
+                    v[i][j]+=v[i-1][j];
+                    j-coins[i]>=0?v[i][j]+=v[i][j-coins[i]]:0;
+                }
+            }
+        }
+        return v[coins.size()-1][amount];
+    }
+};
+class Solution6 {
+public:
+    int coinChange(vector<int> coins, int amount) {
+        vector v(coins.size(),vector<long long>(amount+1,-1));
+        for (int i=0;i<coins.size();i++) {
+            for (int j=0;j<=amount;j++) {
+                if (j==0) v[i][j]=0;
+                else if (i==0) {if (j-coins[i]>=0&&v[i][j-coins[i]]!=-1) v[i][j]=v[i][j-coins[i]]+1;}
+                else {
+                    int a=-1,b=-1;
+                    if (j-coins[i]>=0&&v[i][j-coins[i]]!=-1)a=v[i][j-coins[i]]+1;
+                    if (v[i-1][j]!=-1)b=v[i-1][j];
+                    if (a==-1)v[i][j]=b;
+                    else if (b==-1)v[i][j]=a;
+                    else v[i][j]=min(a,b);
+                }
+            }
+        }
+        return v[coins.size()-1][amount];
+    }
+};
+class Solution {
+public:
+    int numRollsToTarget(int n, int k, int target) {
+        vector dp(n,vector(target+1,0));
+        for (int i=0;i<n;i++) {
+            for (int j=1;j<=target;j++) {
+                if (i==0) {
+                    if (j<=k) dp[i][j]=1;
+                }
+                else
+                {
+                    for (int m=1;m<=k;m++) {
+                        if (j-m>0){dp[i][j]+=dp[i-1][j-m];dp[i][j]%=NUM;}
+                    }
+                }
+            }
+        }
+        return dp[n-1][target];
+    }
+};
+
 
 int main() {
     Solution s;
     vector<int> v1={60,60,60},v2={10,90,10};
-    vector<vector<int>> v3={{2,1,5},{7,10,0},{12,6,4}};
-    s.minCost(1,2,{{1,2}});
+    vector<vector<int>> v3={{-7,12,12,13},{-6,19,19,-6},{9,-2,-10,16},{-4,14,-10,-9}};
+    // s.numRollsToTarget(10,10,100);
+    s.numRollsToTarget(2,6,12);
 
     return 0;
 }
