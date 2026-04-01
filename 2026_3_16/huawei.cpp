@@ -95,36 +95,81 @@ public:
 };
 class Solution2 {
 public:
-    int minimizeTheDifference(vector<vector<int>> mat, int target) {
-        int m=mat.size(),n=mat[0].size();
-        vector dp(m,vector(2500,0));
-        for (int i=0;i<n;i++)dp[0][mat[0][i]]=1;
-        for (int i=1;i<m;i++) {
-            for (int j=0;j<=1600;j++) {
-                if (dp[i-1][j]!=0) {
-                    for (int k=0;k<n;k++) {if (j+mat[i][k]<1601)dp[i][j+mat[i][k]]=1;}
-                }
+    int longestCommonSubsequence(string text1, string text2) {
+        int m=text1.size(),n=text2.size();
+        vector dp(m,vector(n,0));
+        for (int i=0;i<m;i++) {
+            for (int j=0;j<n;j++) {
+                text1[i]==text2[j] ? dp[i][j]=1+(i-1>=0&&j-1>=0?dp[i-1][j-1]:0) : dp[i][j]=max(i-1>=0?dp[i-1][j]:0,j-1>=0?dp[i][j-1]:0);
             }
         }
-        int ans=INT_MAX;
-        for (int i=target;i<1601;i++) {
-            if (dp[m-1][i]!=0) {
-                ans=abs(target-i);
-                break;
-            }
-        }
-        for (int i=target;i>=0;i--) {
-            if (dp[m-1][i]!=0) {
-                ans=min(ans,abs(target-i));
-                break;
-            }
-        }
-        return ans;
+        return dp[m-1][n-1];
     }
 };
+class Solution3 {
+public:
+    int minDistance(string text1, string text2) {
+        int m=text1.size(),n=text2.size();
+        vector dp(m+1,vector(n+1,0));
+        for (int i=0;i<=m;i++)dp[i][0]=i;
+        for (int i=0;i<=n;i++)dp[0][i]=i;
+        for (int i=1;i<=m;i++) {
+            for (int j=1;j<=n;j++) {
+                dp[i][j]= text1[i-1]==text2[j-1]?dp[i-1][j-1]:min(dp[i-1][j],dp[i][j-1])+1;
+            }
+        }
+        return dp[m][n];
+    }
+};
+class Solution4 {
+public:
+    int maxUncrossedLines(vector<int>& text1, vector<int>& text2) {
+        int m=text1.size(),n=text2.size();
+        vector dp(m,vector(n,0));
+        for (int i=0;i<m;i++) {
+            for (int j=0;j<n;j++) {
+                text1[i]==text2[j] ? dp[i][j]=1+(i-1>=0&&j-1>=0?dp[i-1][j-1]:0) : dp[i][j]=max(i-1>=0?dp[i-1][j]:0,j-1>=0?dp[i][j-1]:0);
+            }
+        }
+        return dp[m-1][n-1];
+    }
+};
+
+
+//有问题
+class Solution {
+public:
+    int maxDotProduct(vector<int> text1, vector<int> text2) {
+        int m=text1.size(),n=text2.size();
+        vector dp(m+1,vector(n+1,0));
+        for (int i=1;i<=m;i++) {
+            for (int j=1;j<=n;j++) {
+                dp[i][j] = text1[i-1]*text2[j-1]>0?dp[i-1][j-1]+text1[i-1]*text2[j-1]:max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        if (dp[m][n]==0) {
+            int min_num_1=INT_MAX;
+            int min_num_2=INT_MAX;
+            for (int i=0;i<m;i++) {
+                min_num_1=min(abs(min_num_1),abs(text1[i]));
+                if (text1[i]<0)min_num_1*=-1;
+            }
+            for (int i=0;i<n;i++)
+            {
+                min_num_2=min(abs(min_num_2),abs(text2[i]));
+                if (text2[i]<0)min_num_2*=-1;
+            }
+            return min_num_1*min_num_2;
+        }
+        return dp[m][n];
+    }
+};
+
+
+
 int main() {
-    Solution2 s;
-    s.minimizeTheDifference({{1,2,3},{4,5,6},{7,8,9}},13);
+    Solution s;
+    s.maxDotProduct({5,-4,-3},{-4,-3,0,-4,2});
 
     return 0;
 }
