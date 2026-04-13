@@ -3,6 +3,151 @@ using namespace std;
 
 
 
+int main()
+{
+    // M_PI
+    // int m=1,n=1;
+    // vector<vector<pair<int,int>>> v(m,vector<pair<int,int>>(n,{0,0}));
+    int n,c,m;
+    cin>>n>>c>>m;
+    vector v(n,vector(4,0));
+    for (int i=0;i<n;i++)
+    {
+        int ci,mi,vi;
+        cin>>ci>>mi>>vi;
+        v.push_back({1,ci,mi,vi});//是否选择 cpu 内存 价值
+    }
+    vector dp(n,vector(c,vector(m,vector<vector<int>>{})));
+
+    for (int i=0;i<)
+
+    return 0;
+}
+
+// int main()
+// {
+//     int n,m;
+//     vector<int> t,b;
+//     cin>>n>>m;
+//     for (int i=0;i<n;i++)
+//     {
+//         int x;
+//         cin>>x;
+//         t.push_back(x);
+//     }
+//     for (int i=0;i<n;i++)
+//     {
+//         int x;
+//         cin>>x;
+//         b.push_back(x);
+//     }
+//
+//     priority_queue<pair<int,int>> q;
+//     for  (int i=0;i<n;i++)
+//     {
+//         int temp = t[i]-max(t[i]%2==1?t[i]/2+1:t[i]/2,b[i]);
+//         q.push(make_pair(temp,i));
+//         t[i]-=temp;
+//     }
+//
+//     for (int i=0;i<m;i++)
+//     {
+//         auto it=q.top();
+//         q.pop();
+//         int temp = t[it.second]-max(t[it.second]%2?t[it.second]/2+1:t[it.second]/2,b[it.second]);
+//         q.push(make_pair(temp,it.second));
+//         t[it.second]-=temp;
+//     }
+//
+//     int sum=0;
+//     while (q.empty()==false)
+//     {
+//         sum+=q.top().first;
+//         q.pop();
+//     }
+//     for (int i=0;i<n;i++)sum+=t[i];
+//     cout<<sum<<endl;
+//     return 0;
+// }
+
+
+
+
+
+// int main()
+// {
+//     int n;
+//     vector<int> v,b;
+//     cin>>n;
+//     if (n<0)v.push_back(1);
+//     else v.push_back(0);
+//
+//     string str,temp;
+//     getline(cin,str);
+//     getline(cin,str);
+//     stringstream ss(str);
+//     while (ss>>temp)b.push_back(stoi(temp));
+//
+//     n=abs(n);
+//     for (auto it:b)
+//     {
+//         v.push_back(n%it);
+//         n/=it;
+//     }
+//
+//     string ans;
+//     for (int i=0;i<v.size();i++)
+//     {
+//         char l = char(v[i]+'a');
+//         ans=ans+l;
+//     }
+//
+//     int x_max=-1;
+//     vector<string> x;
+//     for (int i=0;i<ans.size();i++)
+//     {
+//         int temp=0;
+//         while (i-temp>=0&&i+temp<ans.size()&&ans[i-1-temp]==ans[i+1+temp]){if (i+1+temp==ans.size())break;temp++;}
+//         if (temp>x_max)
+//         {
+//             x_max=temp;
+//             x.clear();
+//             x.push_back(ans.substr(i-temp,2*temp+1));
+//         }
+//         else if (temp==x_max)x.push_back(ans.substr(i-temp,2*temp+1));
+//     }
+//     sort(x.begin(),x.end());
+//
+//     int y_max=-1;
+//     vector<string> y;
+//     for (int i=0;i<ans.size();i++)
+//     {
+//         int temp=0;
+//         while (i-temp>=0&&i+1+temp<ans.size()&&ans[i-temp]==ans[i+1+temp]){if (i+1+temp==ans.size())break;temp++;}
+//         if (temp>y_max)
+//         {
+//             y_max=temp;
+//             y.clear();
+//             y.push_back(ans.substr(i+1-temp,2*temp));
+//         }
+//         else if (temp==y_max)y.push_back(ans.substr(i+1-temp,2*temp));
+//     }
+//     sort(y.begin(),y.end());
+//     if (x_max*2+1>y_max*2)
+//     {
+//         cout<<x[0];
+//         if (x[0].size()==ans.size())cout<<"(palindrome)";
+//     }
+//     else
+//     {
+//         cout<<y[0];
+//         if (y[0].size()==ans.size())cout<<"(palindrome)";
+//     }
+//     return 0;
+// }
+// 0
+// 17 3 23 5 15 14 11 2
+
 // int main()
 // {
 //     int n,t,m;//num,total cost,max chose
