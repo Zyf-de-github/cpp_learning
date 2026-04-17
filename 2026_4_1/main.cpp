@@ -19,7 +19,6 @@ int main()
     }
     vector dp(n,vector(c,vector(m,vector<vector<int>>{})));
 
-    for (int i=0;i<)
 
     return 0;
 }

@@ -11,6 +11,7 @@
 
 # ========== VS 工程文件 ==========
 *.sln
+*.json
 *.vcxproj*
 *.vcproj*
 *.pdb
