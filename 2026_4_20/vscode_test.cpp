@@ -294,15 +294,36 @@
 //     return 0;
 // }
 
-
-
-// #include <bits/stdc++.h>
-// using namespace std;
-// int main()
-// {
-//     cout<<"Hello wordl!"<<endl;
-//     return 0;
-// }
+#include <bits/stdc++.h>
+using namespace std;
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int size=height.size();
+        int lptr=0,rptr=size-1,lmax=height[lptr],rmax=height[rptr],ans=0;
+        while(lptr<rptr)
+        {
+            if(lmax>rmax)
+            {
+                rptr--;
+                if(height[rptr]>rmax)rmax=height[rptr];
+                else ans+=rmax-height[rptr];
+            }
+            else 
+            {
+                lptr++;
+                if(height[lptr]>lmax)lmax=height[lptr];
+                else ans+=lmax-height[lptr];
+            }
+        }
+        return ans;
+    }
+};
+int main()
+{
+    cout<<"Hello wordl!"<<endl;
+    return 0;
+}
 
 // 10
 // a 6587
