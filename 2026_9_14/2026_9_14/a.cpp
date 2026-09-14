@@ -32,7 +32,7 @@ public:
 		return ans;
 	}
 };
-class Solution {
+class Solution18 {
 public:
 	bool canEqualDistribution(vector<int> v, int k) {
 		priority_queue<int> pq;
@@ -59,6 +59,7 @@ public:
 		return true;
 	}
 };
+
 int main()
 {
 	Solution s;
