@@ -100,7 +100,7 @@ public:
 		return a;
 	}
 };
-class Solution {
+class Solution16 {
 public:
 	int countTriplets(vector<int> arr) {
 		if (arr.size() <= 1)return 0;
@@ -127,6 +127,20 @@ public:
 					}
 				}
 			}
+		}
+		return ans;
+	}
+};
+class Solution15 {
+public:
+	int minOperations(vector<int>& nums, int k) {
+		int total = 0, ans = 0;
+		for (auto it : nums)total ^= it;
+		total ^= k;
+		while (total)
+		{
+			if (total & 1)ans++;
+			total >>= 1;
 		}
 		return ans;
 	}
