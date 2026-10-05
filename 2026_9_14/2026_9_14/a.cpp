@@ -59,11 +59,83 @@ public:
 		return true;
 	}
 };
+class Solution17 {
+public:
+	int minimizeXor(int num1, int num2) {
+		int num1_t = num1; int num2_t = num2;
+		int cnt1 = 0, cnt2 = 0, ans = 0;
+		while (num2_t)
+		{
+			if (num2_t & 1)cnt2++;
+			num2_t >>= 1;
+		}
+		string num1_s;
+		while (num1_t)
+		{
+			if (num1_t & 1)
+			{
+				num1_s = num1_s + '1';
+				cnt1++;
+			}
+			else num1_s = num1_s + '0';
+			num1_t >>= 1;
+		}
+		if (cnt1 == cnt2)return num1;
+
+		int size = num1_s.size(), flag = 0;
+		if (cnt1 > cnt2)flag = 1;
+		int times = abs(cnt1 - cnt2),ptr = 0;
+		while (times)
+		{
+			if	(ptr >= size ||
+				(ptr < size && num1_s[ptr] == '1'&&flag==1)||
+				(ptr < size && num1_s[ptr] == '0'&&flag==0))
+			{
+				ans += pow(2, ptr);
+				times--;
+			}
+			ptr++;
+		}
+		int a = ans ^ num1;
+		return a;
+	}
+};
+class Solution {
+public:
+	int countTriplets(vector<int> arr) {
+		if (arr.size() <= 1)return 0;
+		vector<int> v;
+		vector <tuple<int, int, int>>debug;
+		v.emplace_back(0);
+		int total = 0,ans=0;
+		for (auto it : arr)
+		{
+			total = it ^ total;
+			v.emplace_back(total);
+		}
+		//0 sum1 sum2
+		for (int j = 1; j < v.size()-1; j++)
+		{
+			for (int i = 0; i < j; i++)
+			{
+				for (int k = j + 1; k < v.size(); k++)
+				{
+					if ((v[i] ^ v[j]) == (v[j] ^ v[k]))
+					{
+						ans++;
+						debug.emplace_back(make_tuple(i,j,k ));
+					}
+				}
+			}
+		}
+		return ans;
+	}
+};
 
 int main()
 {
 	Solution s;
 	//vector<int> v=s.findFluctuations({ 120, 150, 110, 180, 130, 160, 140, 170 }, 3);
-	cout<<s.canEqualDistribution({ 5, 4, 1, 3, 2, 3, 2 }, 4);
+	cout<<s.countTriplets({ 2,3,1,6,7 });
 	return 0;
 }
