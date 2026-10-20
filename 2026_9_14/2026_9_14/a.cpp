@@ -145,11 +145,101 @@ public:
 		return ans;
 	}
 };
+class Solution14 {
+public:
+	bool containsCycle(vector<vector<char>> grid) {
+		m = grid.size();
+		n = grid[0].size();
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (flag || grid[i][j] == '0')continue;
+				else func(grid, i, j, grid[i][j],"begin");
+			}
+		}
+		return flag;
+	}
+private:
+	bool flag = false;
+	int m, n;
+	void func(vector<vector<char>>& grid, int i, int j, char x,string str)
+	{
+		if (i<0||i>=m||j<0||j>=n)return;
+		if (grid[i][j] == '1')
+		{
+			flag = true;
+			return;
+		}
+		if (grid[i][j] != x)return;
+		grid[i][j] = '1';
+		if (!flag && str != "left")func(grid, i, j + 1, x, "right");
+		if (!flag && str != "right")func(grid, i, j - 1, x, "left");
+		if (!flag && str != "down")func(grid, i + 1, j, x, "up");
+		if (!flag && str != "up")func(grid, i - 1, j , x, "down");
+		grid[i][j] = '0';
+		return;
+	}
+};
+class Solution {
+public:
+	vector<vector<char>> updateBoard(vector<vector<char>> board, vector<int> click) {
+		m = board.size();
+		n = board[0].size();
+		if (board[click[0]][click[1]] == 'M')
+		{
+			board[click[0]][click[1]] = 'X';
+			return board;
+		}
+		int m_num = finding_num(board, click[0], click[1]);
+		if (m_num != 0)board[click[0]][click[1]] = m_num + '0';
+		else func(board, click[0], click[1]);
+		return board;
+	}
+private:
+	int m, n;
+	char finding_num(vector<vector<char>>& board, int i, int j)
+	{
+		if (i < 0 || i >= m || j<0 || j>=n)return -1;
+		int temp = 0;
+		for (int _i = -1; _i <= 1; _i++)
+		{
+			if (i + _i < 0 || i + _i >= m)continue;
+			for (int _j = -1; _j <= 1; _j++)
+			{
+				if (j + _j < 0 || j + _j >= n)continue;
+				if (board[i + _i][j + _j] == 'M')temp++;
+			}
+		}
+		return temp;
+	}
+	void func(vector<vector<char>>& board, int i, int j)
+	{
+		int num = finding_num(board, i, j);
+		if (num == -1)return;
+		else if (num != 0)board[i][j] = num + '0';
+		else
+		{
+			board[i][j] = 'B';
+			for (int _i = -1; _i <= 1; _i++)
+			{
+				if (i + _i < 0 || i + _i >= m)continue;
+				for (int _j = -1; _j <= 1; _j++)
+				{
+					if (j + _j < 0 || j + _j >= n)continue;
+					if (board[i + _i][j + _j] == 'E')func(board, i + _i, j + _j);
+				}
+			}
+		}
+	}
+};
+
+
 
 int main()
 {
 	Solution s;
 	//vector<int> v=s.findFluctuations({ 120, 150, 110, 180, 130, 160, 140, 170 }, 3);
-	cout<<s.countTriplets({ 2,3,1,6,7 });
+	vector<vector<char>> v = s.updateBoard({{'E', 'E', 'E', 'E', 'E'}, { 'E', 'E', 'M', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }},{3,0});
 	return 0;
 }
