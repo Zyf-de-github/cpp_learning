@@ -181,7 +181,7 @@ private:
 		return;
 	}
 };
-class Solution {
+class Solution13 {
 public:
 	vector<vector<char>> updateBoard(vector<vector<char>> board, vector<int> click) {
 		m = board.size();
