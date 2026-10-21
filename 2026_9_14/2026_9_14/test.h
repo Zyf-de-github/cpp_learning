@@ -62,6 +62,8 @@
 #include <utility>
 #include <valarray>
 #include <vector>
+#include <unordered_map>
+#include <unordered_set>
 
 #if __cplusplus >= 201103L
 #include <array>
@@ -81,6 +83,4 @@
 #include <tuple>
 #include <typeindex>
 #include <type_traits>
-#include <unordered_map>
-#include <unordered_set>
 #endif

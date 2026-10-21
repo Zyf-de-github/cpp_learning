@@ -1,3 +1,4 @@
+#define _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS
 #include "test.h"
 using namespace std;
 
@@ -233,13 +234,120 @@ private:
 		}
 	}
 };
+class Solution12 {
+public:
+	int largestIsland(vector<vector<int>> grid) {
+		m = grid.size();
+		n = grid[0].size();
+		v.assign(m, vector<int>(n));
+		int ans = 0;
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (grid[i][j] == 1)
+				{
+					id++;
+					dfs_func(grid, i, j);
+					ans = max(ans, size);
+					mp[id] = size;
+					size = 0;
+				}
+			}
+		}
 
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (v[i][j] == 0)
+				{
+					int temp = 0;
+					unordered_map<int, int> um;
+					if (i - 1 >= 0 && v[i - 1][j] != 0)um[v[i - 1][j]] = mp[v[i - 1][j]];
+					if (j - 1 >= 0 && v[i][j - 1] != 0)um[v[i][j - 1]] = mp[v[i][j - 1]];
+					if (i + 1 < m && v[i + 1][j] != 0)um[v[i + 1][j]] = mp[v[i + 1][j]];
+					if (j + 1 < n && v[i][j + 1] != 0)um[v[i][j + 1]] = mp[v[i][j + 1]];
+					for (auto it : um)temp += it.second;
+					ans = max(ans, temp+1);
+				}
+			}
+		}
+		return ans;
+	}
+private:
+	int m = 0, n = 0, size = 0, id = 0;
+	unordered_map<int, int> mp;
+	vector<vector<int>> v;
 
+	void dfs_func(vector<vector<int>>& grid, int i, int j)
+	{
+		if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == 0)return;
+		else size++;
+		grid[i][j] = 0;
+
+		if (i - 1 >= 0)dfs_func(grid, i - 1, j);
+		if (j - 1 >= 0)dfs_func(grid, i, j - 1);
+		if (i + 1 < m)dfs_func(grid, i + 1, j);
+		if (j + 1 < n)dfs_func(grid, i, j + 1);
+		v[i][j] = id;
+		return;
+	}
+};
+class Solution {
+public:
+	int nearestExit(vector<vector<char>> maze, vector<int> entrance) {
+		m = maze.size();
+		n = maze[0].size();
+		deque<node> dq;
+		dq.push_back({ entrance[0],entrance[1],0 });
+		maze[entrance[0]][entrance[1]] = '+';
+		while (!dq.empty())
+		{
+			node cur = dq.front();
+			dq.pop_front();
+			if ((cur.i == 0 || cur.j == 0 || cur.i == m-1 || cur.j == n-1) && (cur.i != entrance[0] || cur.j != entrance[1]))return cur.size;
+			if (cur.i - 1 >= 0 && maze[cur.i - 1][cur.j] == '.')
+			{
+				dq.push_back({ cur.i - 1, cur.j, cur.size + 1 });
+				maze[cur.i - 1][cur.j] = '+';
+			}
+			if (cur.j - 1 >= 0 && maze[cur.i][cur.j - 1] == '.')
+			{
+				dq.push_back({ cur.i, cur.j - 1, cur.size + 1 });
+				maze[cur.i][cur.j - 1] = '+';
+			}
+			if (cur.i + 1 < m && maze[cur.i + 1][cur.j] == '.')
+			{
+				dq.push_back({ cur.i + 1, cur.j, cur.size + 1 });
+				maze[cur.i + 1][cur.j] = '+';
+			}
+			if (cur.j + 1 < n && maze[cur.i][cur.j + 1] == '.') 
+			{
+				dq.push_back({ cur.i, cur.j + 1, cur.size + 1 });
+				maze[cur.i][cur.j + 1] = '+';
+			}
+		}
+		return -1;
+	}
+private:
+	typedef struct node
+	{
+		int i = 0;
+		int j = 0;
+		int size = 0;
+	}node;
+	int m = 0, n = 0;
+};
 
 int main()
 {
 	Solution s;
 	//vector<int> v=s.findFluctuations({ 120, 150, 110, 180, 130, 160, 140, 170 }, 3);
-	vector<vector<char>> v = s.updateBoard({{'E', 'E', 'E', 'E', 'E'}, { 'E', 'E', 'M', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }},{3,0});
+	//vector<vector<char>> v = s.updateBoard({{'E', 'E', 'E', 'E', 'E'}, { 'E', 'E', 'M', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }},{3,0});
+	//cout << s.largestIsland({ { 1,1 }, { 1,0} });
+	//cout << s.nearestExit({ {'+','+','.','+'},{'.','.','.','+'},{'+','+','+','.'}}, {1,2});
+	cout << s.nearestExit({ {'+','+','+'},{'.','.','.'},{'+','+','+'} }, { 1,0 });
+
 	return 0;
 }
