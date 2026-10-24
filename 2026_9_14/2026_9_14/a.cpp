@@ -294,7 +294,7 @@ private:
 		return;
 	}
 };
-class Solution {
+class Solution11 {
 public:
 	int nearestExit(vector<vector<char>> maze, vector<int> entrance) {
 		m = maze.size();
@@ -339,6 +339,100 @@ private:
 	}node;
 	int m = 0, n = 0;
 };
+class Solution10 {
+public:
+	int shortestPathBinaryMatrix(vector<vector<int>> grid) {
+		if (grid[0][0] == 1)return -1;
+		int m = grid.size(), n = grid[0].size();
+		vector<vector<int>> v(m,vector<int>(n,-1));
+		deque<pair<int, int>> dq;
+		dq.push_back({ 0,0 });
+		v[0][0] = 1;
+		while (!dq.empty())
+		{
+			pair<int, int> temp = dq.front();
+			dq.pop_front();
+			for (int i = -1; i <= 1; i++)
+			{
+				for (int j = -1; j <= 1; j++)
+				{
+					int cur_i = temp.first + i, cur_j = temp.second + j;
+					if (cur_i < 0 || cur_i >= m || cur_j < 0 || cur_j >= n)continue;//超出矩阵范围
+					if (grid[cur_i][cur_j] == 1 || v[cur_i][cur_j] != -1)continue;//已经遍历过或者不可达
+					v[cur_i][cur_j] = v[temp.first][temp.second] + 1;
+					dq.push_back({ cur_i ,cur_j });
+				}
+			}
+		}
+		return v[m - 1][n - 1];
+	}
+};
+class Solution9 {
+public:
+	int shortestBridge(vector<vector<int>> grid) {
+		int ans = INT_MAX;
+		int m = grid.size(), n = grid[0].size();
+		vector<vector<int>> v(m, vector<int>(n, -1));
+		pair<int, int> begin_ptr = { -1,-1 };
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (grid[i][j] == 1)
+				{
+					begin_ptr = { i,j };
+					break;
+				}
+			}
+			if (begin_ptr.first != -1)break;
+		}
+		deque<pair<int, int>>dq, temp;
+		dq.push_back(begin_ptr);
+		temp.push_back(begin_ptr);
+		grid[begin_ptr.first][begin_ptr.second] = 0;
+		int cnt = 0;
+		while (!temp.empty())
+		{
+			pair<int, int>cur = temp.front();
+			temp.pop_front();
+			v[cur.first][cur.second] = cnt;
+			if (cnt == 0)
+			{
+				if (cur.first - 1 >= 0  && grid[cur.first - 1][cur.second] == 1) { v[cur.first - 1][cur.second] = cnt; temp.push_back({ cur.first - 1 ,cur.second }); dq.push_back({cur.first - 1 ,cur.second });grid[cur.first - 1][cur.second] = 0; }
+				if (cur.second - 1 >= 0 && grid[cur.first][cur.second - 1] == 1) { v[cur.first][cur.second - 1] = cnt; temp.push_back({ cur.first  ,cur.second - 1}); dq.push_back({cur.first  ,cur.second - 1});grid[cur.first][cur.second - 1] = 0; }
+				if (cur.first + 1 < m   && grid[cur.first + 1][cur.second] == 1) { v[cur.first + 1][cur.second] = cnt; temp.push_back({ cur.first + 1 ,cur.second }); dq.push_back({cur.first + 1 ,cur.second });grid[cur.first + 1][cur.second] = 0; }
+				if (cur.second + 1 < n  && grid[cur.first][cur.second + 1] == 1) { v[cur.first][cur.second + 1] = cnt; temp.push_back({ cur.first  ,cur.second + 1}); dq.push_back({cur.first  ,cur.second + 1});grid[cur.first][cur.second + 1] = 0; }
+			}
+		}
+		while (!dq.empty())
+		{
+			pair<int, int>cur = dq.front();
+			dq.pop_front();
+			if (grid[cur.first][cur.second] == 1)
+			{
+				int see;
+				return v[cur.first][cur.second] - 1;
+			}
+			if (cur.first - 1 >= 0  && v[cur.first - 1][cur.second] == -1){dq.push_back({ cur.first - 1 ,cur.second }); v[cur.first - 1 ][cur.second    ]=v[cur.first][cur.second]+1;} 
+			if (cur.second - 1 >= 0 && v[cur.first][cur.second - 1] == -1){dq.push_back({ cur.first  ,cur.second - 1 });v[cur.first     ][cur.second - 1]=v[cur.first][cur.second]+1;}
+			if (cur.first + 1 < m   && v[cur.first + 1][cur.second] == -1){dq.push_back({ cur.first + 1 ,cur.second }); v[cur.first + 1 ][cur.second    ]=v[cur.first][cur.second]+1;}
+			if (cur.second + 1 < n  && v[cur.first][cur.second + 1] == -1){dq.push_back({ cur.first  ,cur.second + 1 });v[cur.first     ][cur.second + 1]=v[cur.first][cur.second]+1;}
+		}
+		return 0;
+	}
+};
+//({{ 1, 1, 1, 1, 1, 0	},
+//  { 1, 0, 0, 0, 0, 0	},
+//  { 1, 0, 0, 0, 0, 0	},
+//  { 1, 0, 0, 0, 0, 1	},
+//  { 1, 0, 0, 0, 0, 1	},
+//  { 1, 0, 0, 0, 0, 1	}});
+//({{ 0, 1, 0},
+//  { 0, 0, 0},
+//  { 0, 0, 1}});
+
+
+
 
 int main()
 {
@@ -347,7 +441,13 @@ int main()
 	//vector<vector<char>> v = s.updateBoard({{'E', 'E', 'E', 'E', 'E'}, { 'E', 'E', 'M', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }},{3,0});
 	//cout << s.largestIsland({ { 1,1 }, { 1,0} });
 	//cout << s.nearestExit({ {'+','+','.','+'},{'.','.','.','+'},{'+','+','+','.'}}, {1,2});
-	cout << s.nearestExit({ {'+','+','+'},{'.','.','.'},{'+','+','+'} }, { 1,0 });
+	//cout << s.nearestExit({ {'+','+','+'},{'.','.','.'},{'+','+','+'} }, { 1,0 });
+	//cout << s.shortestBridge({{ 0, 1, 0},
+	//						  { 0, 0, 0},
+	//						  { 0, 0, 1} });
+							
+							
+							
 
 	return 0;
 }
