@@ -430,8 +430,58 @@ public:
 //({{ 0, 1, 0},
 //  { 0, 0, 0},
 //  { 0, 0, 1}});
-
-
+class Solution {
+public:
+	bool hasValidPath(vector<vector<char>> grid) {
+		if (grid[0][0] == ')')return false;
+		int m = grid.size(), n = grid[0].size();
+		vector<vector<set<int>>> v(m, vector<set<int>>(n, set<int>()));
+		v[0][0].insert(1);
+		for (int i = 1; i < m; i++)
+		{
+			for (auto it : v[i-1][0])
+			{
+				int cur;
+				if (grid[i][0] == '(')cur = 1;
+				else cur = -1;
+				if (cur + it >= 0)v[i][0].insert(cur + it);
+			}
+		}
+		for (int i = 1; i < n; i++)
+		{
+			for (auto it : v[0][i-1])
+			{
+				int cur = it;
+				if (grid[0][i] == '(')cur += 1;
+				else cur -= 1;
+				if (cur >= 0)v[0][i].insert(cur);
+			}
+		}
+		for (int i = 1; i < m; i++)
+		{
+			for (int j = 1; j < n; j++)
+			{
+				int cur = 0;
+				if (grid[i][j] == '(')cur = 1;
+				else cur = -1;
+				for (auto it : v[i][j - 1])
+				{
+					if (cur + it >= 0)v[i][j].insert(cur + it);
+				}
+				for (auto it : v[i - 1][j])
+				{
+					if (cur + it >= 0)v[i][j].insert(cur + it);
+				}
+			}
+		}
+		if (v[m - 1][n - 1].find(0) != v[m - 1][n - 1].end())return true;
+		return false;
+	}
+};
+//£¨ £¨ £¨
+// £©£¨  £©
+//£¨ £¨ £¨
+//£¨ £¨  £©
 
 
 int main()
@@ -445,7 +495,7 @@ int main()
 	//cout << s.shortestBridge({{ 0, 1, 0},
 	//						  { 0, 0, 0},
 	//						  { 0, 0, 1} });
-							
+	cout << s.hasValidPath({ {'(', '(', '('}, {')', '(', ')'}, {'(', '(', '('}, {'(', '(', ')'} });
 							
 							
 
