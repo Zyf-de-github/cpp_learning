@@ -430,7 +430,7 @@ public:
 //({{ 0, 1, 0},
 //  { 0, 0, 0},
 //  { 0, 0, 1}});
-class Solution {
+class Solution8 {
 public:
 	bool hasValidPath(vector<vector<char>> grid) {
 		if (grid[0][0] == ')')return false;
@@ -482,6 +482,67 @@ public:
 // £©£¨  £©
 //£¨ £¨ £¨
 //£¨ £¨  £©
+class Solution7 {
+public:
+	bool validPartition(vector<int> nums) {
+		int n = nums.size();
+		vector<bool> dp(n+1, false);
+		dp[0] = true;
+		for (int i = 0; i < n; i++)
+		{
+			if (i >= 1 && nums[i] == nums[i - 1] && dp[i - 1])dp[i + 1] = true;
+			if (i >= 2 && nums[i] == nums[i - 1] && nums[i] == nums[i - 2] && dp[i - 2])dp[i + 1] = true;
+			if (i >= 2 && nums[i] == nums[i - 1] + 1 && nums[i] == nums[i - 2] + 2 && dp[i - 2])dp[i + 1] = true;
+		}
+		return dp[n];
+	}
+};
+class Solution6 {
+public:
+	bool wordBreak(string s, vector<string> wordDict) {
+		int n = s.size();
+		vector<bool> dp(n + 1, false);
+		dp[0] = true;
+		for (int i = 0; i < n; i++)
+		{
+			for (auto it : wordDict)
+			{
+				int size = it.size();
+				if (i + 1 < size)continue;
+				string temp = s.substr(i - size + 1, size);
+				if (it == temp && dp[i - size + 1])dp[i + 1] = true;
+			}
+		}
+		return dp[n];
+	}
+};
+class Solution {
+public:
+	int minCut(string s) {
+		int n = s.size();
+		if (n <= 1)return 0;
+		vector<int>dp(n + 1, -1);
+		dp[0] = 0;
+		dp[1] = 0;
+		for (int i = 1; i < n; i++)
+		{
+			for (int j = 0; j <= i; j++)
+			{
+				string temp = s.substr(j, i - j + 1);
+				if (temp == string(temp.rbegin(), temp.rend()) && dp[j] != -1)
+				{
+					if (j == 0)dp[i + 1] = 0;
+					else
+					{
+						if (dp[i + 1] == -1)dp[i + 1] = dp[j] + 1;
+						else dp[i + 1] = min(dp[i + 1], dp[j] + 1);
+					}
+				}
+			}
+		}
+		return dp[n];
+	}
+};
 
 
 int main()
@@ -495,7 +556,10 @@ int main()
 	//cout << s.shortestBridge({{ 0, 1, 0},
 	//						  { 0, 0, 0},
 	//						  { 0, 0, 1} });
-	cout << s.hasValidPath({ {'(', '(', '('}, {')', '(', ')'}, {'(', '(', '('}, {'(', '(', ')'} });
+	//cout << s.hasValidPath({ {'(', '(', '('}, {')', '(', ')'}, {'(', '(', '('}, {'(', '(', ')'} });
+	//cout << s.validPartition({ 5,6,7,8,9,10,11 });
+	//cout << s.wordBreak("leetcode", { "leet", "code" });
+	cout << s.minCut("aaaaacccccaaaac");
 							
 							
 
