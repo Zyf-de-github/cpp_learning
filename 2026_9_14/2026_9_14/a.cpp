@@ -516,7 +516,7 @@ public:
 		return dp[n];
 	}
 };
-class Solution {
+class Solution5 {
 public:
 	int minCut(string s) {
 		int n = s.size();
@@ -528,14 +528,21 @@ public:
 		{
 			for (int j = 0; j <= i; j++)
 			{
-				string temp = s.substr(j, i - j + 1);
-				if (temp == string(temp.rbegin(), temp.rend()) && dp[j] != -1)
+				bool isPal = true;
+				for (int l = j, r = i; l < r; ++l, --r)if (s[l] != s[r]) { isPal = false; break; }
+				if (isPal && dp[j] != -1)
 				{
-					if (j == 0)dp[i + 1] = 0;
+					if (j == 0)
+					{
+						dp[i + 1] = 0;
+						break;
+					}
 					else
 					{
 						if (dp[i + 1] == -1)dp[i + 1] = dp[j] + 1;
 						else dp[i + 1] = min(dp[i + 1], dp[j] + 1);
+						// dp[i + 1] = dp[j] + 1;
+						// break;
 					}
 				}
 			}
@@ -543,11 +550,53 @@ public:
 		return dp[n];
 	}
 };
+class Solution4 {
+public:
+	vector<int> nextGreaterElements(vector<int> nums) {
+		int n = nums.size();
+		stack<int> s;
+		vector<int> ans(n,-1);
+		for (int i = 0; i < 2 * n - 1; i++)
+		{
+			while (!s.empty() && nums[s.top()%n] < nums[i%n])
+			{
+				ans[s.top() % n] = nums[i%n];
+				s.pop();
+			}
+			s.push(i);
+		}
+		return ans;
+	}
+};
+// 3 2 1 4 2 3
+class StockSpanner {
+public:
+	StockSpanner() {
+		s = std::stack<int>();
+		ptr = 0;
+		v.clear();
+	}
+	stack<int> s;
+	int ptr = 0;
+	vector<int> v;
+	int next(int price) {
+		int ans = 0;
+		v.push_back(price);
+		while (!s.empty() && v[s.top()] <= price)
+		{
+			s.pop();
+		}
+		ans = ptr - (s.empty() ? -1 : s.top());
+		s.push(ptr);
+		ptr++;
+		return ans;
+	}
+};
 
 
 int main()
 {
-	Solution s;
+	//Solution s;
 	//vector<int> v=s.findFluctuations({ 120, 150, 110, 180, 130, 160, 140, 170 }, 3);
 	//vector<vector<char>> v = s.updateBoard({{'E', 'E', 'E', 'E', 'E'}, { 'E', 'E', 'M', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }},{3,0});
 	//cout << s.largestIsland({ { 1,1 }, { 1,0} });
@@ -559,9 +608,16 @@ int main()
 	//cout << s.hasValidPath({ {'(', '(', '('}, {')', '(', ')'}, {'(', '(', '('}, {'(', '(', ')'} });
 	//cout << s.validPartition({ 5,6,7,8,9,10,11 });
 	//cout << s.wordBreak("leetcode", { "leet", "code" });
-	cout << s.minCut("aaaaacccccaaaac");
-							
-							
+	StockSpanner* x = new StockSpanner();
+	cout<<x->next(1)<<' ';
+	cout<<x->next(4)<<' ';
+	cout<<x->next(3)<<' ';
+	cout<<x->next(5)<<' ';
+	cout<<x->next(5)<<' ';
+	cout<<x->next(2)<<' ';
+	cout<<x->next(3)<<' ';
+	cout<<x->next(6)<<' ';
+
 
 	return 0;
 }
