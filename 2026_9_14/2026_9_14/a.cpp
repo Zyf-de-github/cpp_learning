@@ -592,11 +592,87 @@ public:
 		return ans;
 	}
 };
-
-
+class Solution3 {
+public:
+	long long bowlSubarrays(vector<int> nums) {
+		long long ans = 0;
+		stack<long long>st;
+		for (int i = 0; i < nums.size(); i++)
+		{
+			while (!st.empty() && nums[st.top()] <= nums[i])
+			{
+				st.pop();
+				if (!st.empty())ans++;
+			}
+			st.push(i);
+		}
+		return ans;
+	}
+};
+class Solution2 {
+public:
+	bool find132pattern(vector<int> nums) {
+		stack<int> st;
+		int n = nums.size(), k = INT_MIN;
+		for (int i = n - 1; i >= 0; i--)
+		{
+			if (nums[i] < k)return true;
+			while (!st.empty() && st.top() < nums[i])
+			{
+				k = max(st.top(), k);
+				st.pop();
+			}
+			st.push(nums[i]);
+		}
+		return false;
+	}
+};
+class Solution1 {
+public:
+	long long numberOfSubarrays(vector<int> nums) {
+		stack<pair<int,int>> st;
+		int n = nums.size(), ans = 0;
+		for (int i = 0; i < n; i++)
+		{
+			int temp = 0;
+			while (!st.empty() && st.top().first <= nums[i])
+			{
+				if (st.top().first == nums[i])temp=st.top().second;
+				st.pop();
+			}
+			ans += temp;
+			st.push({ nums[i],temp + 1 });
+		}
+		return ans+n;
+	}
+};
+class Solution0 {
+public:
+	vector<int> canSeePersonsCount(vector<int> heights) {
+		int n = heights.size();
+		stack<int> st;
+		vector<int> v(n,0);
+		for (int i = n - 1; i >= 0; i--)
+		{
+			int temp = 0;
+			while (!st.empty() && heights[st.top()] <= heights[i])
+			{
+				temp++;
+				st.pop();
+			}
+			if (!st.empty())temp++;
+			v[i] = temp;
+			st.push(i);
+		}
+		v[n - 1] = 0;
+		return v;
+	}
+};
 int main()
 {
-	//Solution s;
+	Solution s;
+	vector<int> v = s.canSeePersonsCount({ 10,6,8,5,11,9 });
+	for (auto it : v)cout << it << ' ';
 	//vector<int> v=s.findFluctuations({ 120, 150, 110, 180, 130, 160, 140, 170 }, 3);
 	//vector<vector<char>> v = s.updateBoard({{'E', 'E', 'E', 'E', 'E'}, { 'E', 'E', 'M', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }, { 'E', 'E', 'E', 'E', 'E' }},{3,0});
 	//cout << s.largestIsland({ { 1,1 }, { 1,0} });
@@ -608,16 +684,14 @@ int main()
 	//cout << s.hasValidPath({ {'(', '(', '('}, {')', '(', ')'}, {'(', '(', '('}, {'(', '(', ')'} });
 	//cout << s.validPartition({ 5,6,7,8,9,10,11 });
 	//cout << s.wordBreak("leetcode", { "leet", "code" });
-	StockSpanner* x = new StockSpanner();
-	cout<<x->next(1)<<' ';
-	cout<<x->next(4)<<' ';
-	cout<<x->next(3)<<' ';
-	cout<<x->next(5)<<' ';
-	cout<<x->next(5)<<' ';
-	cout<<x->next(2)<<' ';
-	cout<<x->next(3)<<' ';
-	cout<<x->next(6)<<' ';
-
-
+	//StockSpanner* x = new StockSpanner();
+	//cout<<x->next(1)<<' ';
+	//cout<<x->next(4)<<' ';
+	//cout<<x->next(3)<<' ';
+	//cout<<x->next(5)<<' ';
+	//cout<<x->next(5)<<' ';
+	//cout<<x->next(2)<<' ';
+	//cout<<x->next(3)<<' ';
+	//cout<<x->next(6)<<' ';
 	return 0;
 }
