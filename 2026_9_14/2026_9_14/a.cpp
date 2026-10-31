@@ -3,7 +3,7 @@
 using namespace std;
 
 
-
+# if 0
 class Solution20 {
 public:
 	int staffGroup(vector<int>& staff) {
@@ -695,3 +695,4 @@ int main()
 	//cout<<x->next(6)<<' ';
 	return 0;
 }
+#endif
